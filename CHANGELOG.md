@@ -1,5 +1,16 @@
 # Changelog
 
+## 5.13.0 - 2026-06-24
+
+### Features
+
+- Extend theme definitions with required cssVar property
+
+### Bug Fixes
+
+- Constrain text width on p elements instead of topic container to allow LaTeX to render at full width
+- Prevent keyboard event processing during IME composition in DOM and SVG handlers
+
 ## 5.12.2 - 2026-05-25
 
 ### Features
