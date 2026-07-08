@@ -120,7 +120,7 @@ export function checkMoveValid(from: NodeObj, to: NodeObj) {
   return valid
 }
 
-export function deepClone(obj: NodeObj) {
+export function deepClone<T>(obj: T): T {
   const deepCloneObj = JSON.parse(
     JSON.stringify(obj, (k, v) => {
       if (k === 'parent') return undefined

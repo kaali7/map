@@ -1,4 +1,4 @@
-import { generateUUID, getArrowPoints, getObjById, getOffsetLT, setAttributes } from './utils/index'
+import { deepClone, generateUUID, getArrowPoints, getObjById, getOffsetLT, setAttributes } from './utils/index'
 import LinkPanHelper from './utils/LinkPanHelper'
 import { calculatePrecisePosition, createArrowGroup, createLabel, editSvgText, svgNS } from './utils/svg'
 import type { ArrowSvg, Topic } from './types/dom'
@@ -139,14 +139,16 @@ function updateArrowPath(
   // Update main path
   arrow.line.setAttribute('d', mainPath)
 
-  // Apply styles to the main line if they exist
-  if (linkItem.style) {
-    const style = linkItem.style
-    if (style.stroke) arrow.line.setAttribute('stroke', style.stroke)
-    if (style.strokeWidth) arrow.line.setAttribute('stroke-width', String(style.strokeWidth))
-    if (style.strokeDasharray) arrow.line.setAttribute('stroke-dasharray', style.strokeDasharray)
-    if (style.strokeLinecap) arrow.line.setAttribute('stroke-linecap', style.strokeLinecap)
-    if (style.opacity !== undefined) arrow.line.setAttribute('opacity', String(style.opacity))
+  // Apply styles to the main line
+  const style = linkItem.style || {}
+  arrow.line.setAttribute('stroke', style.stroke || 'rgb(227, 125, 116)')
+  arrow.line.setAttribute('stroke-width', String(style.strokeWidth || '2'))
+  arrow.line.setAttribute('stroke-dasharray', style.strokeDasharray || '8,2')
+  arrow.line.setAttribute('stroke-linecap', style.strokeLinecap || 'cap')
+  if (style.opacity !== undefined && style.opacity !== null && style.opacity !== '') {
+    arrow.line.setAttribute('opacity', String(style.opacity))
+  } else {
+    arrow.line.removeAttribute('opacity')
   }
 
   // Update hotzone for main path (find the first hotzone path which corresponds to the main line)
@@ -167,12 +169,13 @@ function updateArrowPath(
     }
 
     // Apply styles to arrow head
-    if (linkItem.style) {
-      const style = linkItem.style
-      if (style.stroke) arrow.arrow1.setAttribute('stroke', style.stroke)
-      if (style.strokeWidth) arrow.arrow1.setAttribute('stroke-width', String(style.strokeWidth))
-      if (style.strokeLinecap) arrow.arrow1.setAttribute('stroke-linecap', style.strokeLinecap)
-      if (style.opacity !== undefined) arrow.arrow1.setAttribute('opacity', String(style.opacity))
+    arrow.arrow1.setAttribute('stroke', style.stroke || 'rgb(227, 125, 116)')
+    arrow.arrow1.setAttribute('stroke-width', String(style.strokeWidth || '2'))
+    arrow.arrow1.setAttribute('stroke-linecap', style.strokeLinecap || 'cap')
+    if (style.opacity !== undefined && style.opacity !== null && style.opacity !== '') {
+      arrow.arrow1.setAttribute('opacity', String(style.opacity))
+    } else {
+      arrow.arrow1.removeAttribute('opacity')
     }
   }
 
@@ -187,16 +190,23 @@ function updateArrowPath(
       if (hotzones.length > 2) {
         hotzones[2].setAttribute('d', arrowPath2)
       }
-
-      // Apply styles to start arrow head
-      if (linkItem.style) {
-        const style = linkItem.style
-        if (style.stroke) arrow.arrow2.setAttribute('stroke', style.stroke)
-        if (style.strokeWidth) arrow.arrow2.setAttribute('stroke-width', String(style.strokeWidth))
-        if (style.strokeLinecap) arrow.arrow2.setAttribute('stroke-linecap', style.strokeLinecap)
-        if (style.opacity !== undefined) arrow.arrow2.setAttribute('opacity', String(style.opacity))
-      }
     }
+  } else {
+    // hide arrow2 if not bidirectional
+    arrow.arrow2.setAttribute('d', '')
+    if (hotzones.length > 2) {
+      hotzones[2].setAttribute('d', '')
+    }
+  }
+
+  // Apply styles to start arrow head
+  arrow.arrow2.setAttribute('stroke', style.stroke || 'rgb(227, 125, 116)')
+  arrow.arrow2.setAttribute('stroke-width', String(style.strokeWidth || '2'))
+  arrow.arrow2.setAttribute('stroke-linecap', style.strokeLinecap || 'cap')
+  if (style.opacity !== undefined && style.opacity !== null && style.opacity !== '') {
+    arrow.arrow2.setAttribute('opacity', String(style.opacity))
+  } else {
+    arrow.arrow2.removeAttribute('opacity')
   }
 
   // Update label position and color
@@ -206,11 +216,9 @@ function updateArrowPath(
   }
 
   // Apply label color if specified
-  if (linkItem.style?.labelColor) {
-    const div = arrow.labelEl
-    if (div) {
-      div.style.color = linkItem.style.labelColor
-    }
+  const div = arrow.labelEl
+  if (div) {
+    div.style.color = style.labelColor || 'rgb(235, 95, 82)'
   }
 
   // Update highlight layer
@@ -647,5 +655,56 @@ export function editArrowLabel(this: MindElixirInstance, el: ArrowSvg) {
 export function tidyArrow(this: MindElixirInstance) {
   this.arrows = this.arrows.filter(arrow => {
     return getObjById(arrow.from, this.nodeData) && getObjById(arrow.to, this.nodeData)
+  })
+}
+
+export const reshapeArrow = function (this: MindElixirInstance, arrow: Arrow, patchData: Partial<Arrow>) {
+  const origin = deepClone(arrow)
+  // merge styles
+  if (origin.style && patchData.style) {
+    patchData.style = Object.assign({}, origin.style, patchData.style)
+  }
+  Object.assign(arrow, patchData)
+
+  const el = this.arrowSvg.querySelector(`g[data-linkid="${arrow.id}"]`) as ArrowSvg | null
+  if (el) {
+    if (patchData.label !== undefined && el.labelEl) {
+      const renderedLabel = this.markdown ? this.markdown(arrow.label, arrow) : arrow.label
+      el.labelEl.innerHTML = renderedLabel
+    }
+
+    const from = this.findEle(arrow.from)
+    const to = this.findEle(arrow.to)
+    if (from && to) {
+      if (!arrow.delta1 || !arrow.delta2) {
+        const defaults = calculateDefaultDeltas(this, from, to)
+        arrow.delta1 = arrow.delta1 || defaults.delta1
+        arrow.delta2 = arrow.delta2 || defaults.delta2
+      }
+
+      const fromData = calcCtrlP(this, from, arrow.delta1!)
+      const toData = calcCtrlP(this, to, arrow.delta2!)
+
+      const { x: p1x, y: p1y } = calcP(fromData)
+      const { ctrlX: p2x, ctrlY: p2y } = fromData
+      const { ctrlX: p3x, ctrlY: p3y } = toData
+      const { x: p4x, y: p4y } = calcP(toData)
+
+      updateArrowPath(el, p1x, p1y, p2x, p2y, p3x, p3y, p4x, p4y, arrow)
+
+      // If the arrow is currently selected, update controllers position inline
+      if (this.currentArrow?.arrowObj?.id === arrow.id) {
+        this.P2.style.cssText = `top:${p2y}px;left:${p2x}px;`
+        this.P3.style.cssText = `top:${p3y}px;left:${p3x}px;`
+        updateControlLine(this.line1, p1x, p1y, p2x, p2y)
+        updateControlLine(this.line2, p3x, p3y, p4x, p4y)
+      }
+    }
+  }
+
+  this.bus.fire('operation', {
+    name: 'reshapeArrow',
+    obj: arrow,
+    origin,
   })
 }

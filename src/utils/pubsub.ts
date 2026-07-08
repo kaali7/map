@@ -65,6 +65,11 @@ export type ArrowOperation =
       name: 'finishEditArrowLabel'
       obj: Arrow
     }
+  | {
+      name: 'reshapeArrow'
+      obj: Arrow
+      origin: Arrow
+    }
 
 export type Operation = NodeOperation | MultipleNodeOperation | SummaryOperation | ArrowOperation
 export type OperationType = Operation['name']
