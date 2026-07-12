@@ -278,7 +278,8 @@ export default function (mind: MindElixirInstance) {
       case State.DragWait:
         longPressHelper.handleMove(e)
         if (longPressHelper.timer === null) {
-          mind.ptState = State.Idle
+          mind.ptState = State.Pan
+          panHelper.handlePointerMove(e)
         }
         break
       case State.Drag:
