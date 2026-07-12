@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.14.0 - 2026-07-12
+
+### Features
+
+- Implement `reshapeArrow` utility to support programmatically updating connection arrow properties (e.g., style, label, and deltas) and emit `reshapeArrow` operation event.
+
+### Bug Fixes
+
+- **mobile**: Fallback to map panning when node dragging is aborted in `DragWait` state.
+
 ## 5.13.0 - 2026-06-24
 
 ### Features
