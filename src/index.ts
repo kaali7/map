@@ -175,15 +175,13 @@ MindElixir.E = findEle
  * @static
  * @param {String} topic root topic
  */
-if (import.meta.env.MODE !== 'lite') {
-  MindElixir.new = (topic: string): MindElixirData => ({
-    nodeData: {
-      id: generateUUID(),
-      topic: topic || 'new topic',
-      children: [],
-    },
-  })
-}
+MindElixir.new = (topic: string): MindElixirData => ({
+  nodeData: {
+    id: generateUUID(),
+    topic: topic || 'new topic',
+    children: [],
+  },
+})
 
 export interface MindElixirCtor {
   new (options: Options): MindElixirInstance

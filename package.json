@@ -99,7 +99,7 @@
     "prettier": "3.6.2",
     "rimraf": "^6.0.1",
     "simple-markdown-to-html": "^1.0.0",
-    "typescript": "^5.9.2",
+    "typescript": "^7.0.2",
     "vite": "^7.1.7",
     "vite-plugin-istanbul": "^7.2.0"
   }
