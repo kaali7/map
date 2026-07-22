@@ -49,6 +49,9 @@ export default function (mind: MindElixirInstance, option: true | ContextMenuOpt
   const linkBidirectional = createLi('cm-link-bidirectional', lang.linkBidirectional, '')
   const summary = createLi('cm-summary', lang.summary, '')
 
+  const center_view = createLi('cm-center', 'Center Map', '')
+  const reset_zoom = createLi('cm-reset_zoom', 'Reset Zoom', '')
+
   const menuUl = document.createElement('ul')
   menuUl.className = 'menu-list'
   menuUl.appendChild(add_child)
@@ -66,6 +69,8 @@ export default function (mind: MindElixirInstance, option: true | ContextMenuOpt
     menuUl.appendChild(link)
     menuUl.appendChild(linkBidirectional)
   }
+  menuUl.appendChild(center_view)
+  menuUl.appendChild(reset_zoom)
   if (option && option.extend) {
     for (let i = 0; i < option.extend.length; i++) {
       const item = option.extend[i]
@@ -83,59 +88,70 @@ export default function (mind: MindElixirInstance, option: true | ContextMenuOpt
 
   mind.container.append(menuContainer)
   let isRoot = true
+
+  center_view.onclick = () => {
+    mind.toCenter()
+    menuContainer.hidden = true
+  }
+  reset_zoom.onclick = () => {
+    mind.scale(1.0)
+    menuContainer.hidden = true
+  }
+
   // Helper function to actually render and position context menu.
   const showMenu = (e: MouseEvent) => {
     console.log('showContextMenu', e)
     const target = e.target as HTMLElement
-    if (isTopic(target)) {
+    const isNode = isTopic(target)
+
+    if (isNode) {
       if (target.parentElement!.tagName === 'ME-ROOT') {
         isRoot = true
       } else {
         isRoot = false
       }
-      if (isRoot) {
-        focus.className = 'disabled'
-        up.className = 'disabled'
-        down.className = 'disabled'
-        add_parent.className = 'disabled'
-        add_sibling.className = 'disabled'
-        remove_child.className = 'disabled'
-      } else {
-        focus.className = ''
-        up.className = ''
-        down.className = ''
-        add_parent.className = ''
-        add_sibling.className = ''
-        remove_child.className = ''
-      }
-      menuContainer.hidden = false
+    } else {
+      isRoot = true
+    }
 
-      menuUl.style.top = ''
-      menuUl.style.bottom = ''
-      menuUl.style.left = ''
-      menuUl.style.right = ''
-      const height = menuUl.offsetHeight
-      const width = menuUl.offsetWidth
-      // for transformed container
-      const rect = menuUl.getBoundingClientRect()
-      const relativeY = e.clientY - rect.top
-      const relativeX = e.clientX - rect.left
+    if (isRoot) {
+      focus.className = 'disabled'
+      up.className = 'disabled'
+      down.className = 'disabled'
+      add_parent.className = 'disabled'
+      add_sibling.className = 'disabled'
+      remove_child.className = 'disabled'
+    } else {
+      focus.className = ''
+      up.className = ''
+      down.className = ''
+      add_parent.className = ''
+      add_sibling.className = ''
+      remove_child.className = ''
+    }
 
-      if (height + relativeY > window.innerHeight) {
-        menuUl.style.top = ''
-        menuUl.style.bottom = '0px'
-      } else {
-        menuUl.style.bottom = ''
-        menuUl.style.top = relativeY + 15 + 'px'
-      }
+    menuContainer.hidden = false
 
-      if (width + relativeX > window.innerWidth) {
-        menuUl.style.left = ''
-        menuUl.style.right = '0px'
-      } else {
-        menuUl.style.right = ''
-        menuUl.style.left = relativeX + 10 + 'px'
-      }
+    menuUl.style.top = ''
+    menuUl.style.bottom = ''
+    menuUl.style.left = ''
+    menuUl.style.right = ''
+
+    const height = menuUl.offsetHeight || 250
+    const width = menuUl.offsetWidth || 200
+    const x = e.clientX
+    const y = e.clientY
+
+    if (y + height > window.innerHeight) {
+      menuUl.style.top = Math.max(10, window.innerHeight - height - 10) + 'px'
+    } else {
+      menuUl.style.top = y + 'px'
+    }
+
+    if (x + width > window.innerWidth) {
+      menuUl.style.left = Math.max(10, window.innerWidth - width - 10) + 'px'
+    } else {
+      menuUl.style.left = x + 'px'
     }
   }
 

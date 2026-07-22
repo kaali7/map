@@ -37,6 +37,7 @@ declare let window: Window
 const E = MindElixir.E
 const options: Options = {
   el: '#map',
+  direction: 1,
   newTopicName: 'New Node',
   scaleMax: 5.0,
   scaleMin: 0.1,

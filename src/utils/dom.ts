@@ -78,7 +78,9 @@ export const shapeTpc = function (this: MindElixirInstance, tpc: Topic, nodeObj:
     if (!nodeObj.image) tpc.setAttribute('data-media-type', 'icon')
     const iconsEl = document.createElement('span')
     iconsEl.className = 'icons'
-    iconsEl.innerHTML = nodeObj.icons.map(icon => `<span>${encodeHTML(icon)}</span>`).join('')
+    iconsEl.innerHTML = nodeObj.icons
+      .map(icon => (icon.trim().startsWith('<svg') ? `<span class="icon-svg-wrapper">${icon}</span>` : `<span>${encodeHTML(icon)}</span>`))
+      .join('')
     tpc.appendChild(iconsEl)
     tpc.icons = iconsEl
   } else if (tpc.icons) {

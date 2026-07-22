@@ -7,7 +7,7 @@ const node = (branchColor?: string, size = '14') => ({
 const leaf = () => ({ fontSize: '12' })
 
 const campaignBrainstorming: MindElixirData = {
-  direction: 2, // SIDE — balanced layout
+  direction: 1, // RIGHT — right aligned layout
   theme: {
     name: 'Campaign',
     palette: [
@@ -19,15 +19,15 @@ const campaignBrainstorming: MindElixirData = {
       '#06b6d4', // cyan — extra
     ],
     cssVar: {
-      '--main-color':   '#111827',
+      '--main-color':   '#f8f9fa',
       '--main-bgcolor': 'transparent',
-      '--color':        '#374151',
-      '--bgcolor':      '#f8fafc',
-      '--panel-color':  '17, 24, 39',
-      '--panel-bgcolor':'255, 255, 255',
-      '--selected':     '#eff6ff',
-      '--root-color':   '#111827',
-      '--root-bgcolor': '#f8fafc',
+      '--color':        '#ced4da',
+      '--bgcolor':      '#121212',
+      '--panel-color':  '255, 255, 255',
+      '--panel-bgcolor':'33, 37, 41',
+      '--selected':     '#343a40',
+      '--root-color':   '#f8f9fa',
+      '--root-bgcolor': '#121212',
       '--root-border-color': 'rgba(0, 0, 0, 0)',
       '--main-border':  'none',
       '--main-radius':  '22px',
@@ -39,11 +39,10 @@ const campaignBrainstorming: MindElixirData = {
     style: { fontSize: '26', fontWeight: '700' },
     children: [
 
-      // ── LEFT ──
       {
         topic: 'Problem Statement',
         id: 'ps',
-        direction: 0,
+        direction: 1,
         expanded: true,
         style: node('#2563eb'),
         children: [
@@ -57,7 +56,7 @@ const campaignBrainstorming: MindElixirData = {
       {
         topic: 'Gabriel',
         id: 'gabriel',
-        direction: 0,
+        direction: 1,
         expanded: true,
         style: node('#7c3aed'),
         children: [
@@ -67,7 +66,6 @@ const campaignBrainstorming: MindElixirData = {
         ],
       },
 
-      // ── RIGHT ──
       {
         topic: 'Matteo',
         id: 'matteo',

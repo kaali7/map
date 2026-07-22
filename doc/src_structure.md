@@ -60,8 +60,18 @@ Helper functions and internal utilities.
 - **`svg.ts`**: SVG generation helpers.
 - **`theme.ts`**: Default theme color palettes (Light & Dark) and CSS variable logic.
 
-### `index.html` (Application Demo & Presentation Feature)
-The main demo page containing complete UI layout and features:
+### `index.html` (Application Web App Demo & Responsive Interface)
+The main application demo page containing complete UI layout, mobile responsive dock, categorized menu popovers, and presentation system:
+- **Responsive Top Header & Two-Pill Navbar**:
+  - **Left Pill (`.header-left`)**: Logo `[M]` + Map Title `Camp... ∨` (Title edit toggle & compact truncation to 4-5 letters on mobile).
+  - **Right Pill (`.header-right`)**: `[ ↶ Undo ]` `[ ↷ Redo ]` `[ 🖥️ Present ]` `[ : More Options ]`.
+  - **Portrait & Landscape Mobile/Tablet Support**: Uses `@media (max-width: 768px), (max-height: 550px) and (max-width: 1024px)` to ensure both vertical and horizontal phone/tablet positions display a clean, un-cluttered 2-pill layout while hiding bulky desktop controls (`.desktop-only`, `#right-toolbar`, `#bottom-left`, `#bottom-right`).
+- **Categorized Popover Menu & Viewport Boundary Math**:
+  - `#more-options-popover` calculates dynamic right offsets (`popover.style.right = Math.max(8, window.innerWidth - rect.right) + 'px'`, `popover.style.left = 'auto'`) to guarantee the dropdown menu expands leftward under the button and never overflows off the right edge of the screen on any resolution.
+  - Divided into clean categories with dividers: Quick Actions (`Share Map`, `Save Map`, `Center View`, `Search Map`, `New Map`), Appearance (`Theme Colors ▸`, `Light/Dark Mode`), Data (`Export JSON`, `Import JSON`), and Danger (`Clear Canvas`).
+- **Theme Colors Leftward Flyout & Mobile Inline Expansion**:
+  - `#theme-flyout-panel` uses `right: calc(100% + 8px); left: auto;` on desktop to expand to the left of the main popover menu into open viewport space.
+  - Expands inline below Theme Colors on mobile/tablet screens to prevent horizontal clipping.
 - **Presentation Mode (`#btn-present`)**:
   - Fullscreen slide-by-slide traversal of mind map nodes in hierarchical order.
   - **Dynamic Zoom & Centering (`zoomToNode`)**: Computes unscaled map-local node coordinates `(nodeLocalX, nodeLocalY)` to calculate exact `translate3d(x, y, 0)` offsets for precise viewport centering at depth-based scale levels (Root `1.8x`, Main Branch `2.5x`, Child Nodes `3.2x`).

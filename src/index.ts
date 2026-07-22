@@ -74,7 +74,7 @@ function MindElixir(
   this.generateSubBranch = generateSubBranch || sub
   this.overflowHidden = overflowHidden ?? false
   this.compact = compact ?? false
-  this.alignment = alignment ?? 'root'
+  this.alignment = alignment ?? (this.direction === SIDE ? 'root' : 'nodes')
   this.handleWheel = handleWheel ?? true
   this.markdown = markdown || undefined // Custom markdown parser function
   this.imageProxy = imageProxy || undefined // Image proxy function
@@ -93,8 +93,7 @@ function MindElixir(
 
   this.container.className = 'map-container'
 
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-  this.theme = (theme || (mediaQuery.matches ? DARK_THEME : THEME)) as MindElixirInstance['theme']
+  this.theme = (theme || DARK_THEME) as MindElixirInstance['theme']
 
   // infrastructure
   const canvas = document.createElement('div') // map-canvas Element

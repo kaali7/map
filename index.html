@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Mind Elixir — Campaign Brainstorming</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -242,9 +242,10 @@
     .more-options-btn svg { width: 16px; height: 16px; }
 
     #more-options-popover {
-      position: absolute;
-      top: 50px;
-      left: 12px;
+      position: fixed;
+      top: 68px;
+      right: 16px;
+      left: auto;
       background: white;
       border-radius: 12px;
       padding: 8px;
@@ -253,7 +254,8 @@
       flex-direction: column;
       gap: 4px;
       z-index: 2000;
-      min-width: 180px;
+      width: 220px;
+      box-sizing: border-box;
     }
     #more-options-popover.visible { display: flex; }
     
@@ -298,7 +300,8 @@
     #theme-flyout-panel {
       position: absolute;
       top: -6px;
-      left: calc(100% + 8px);
+      right: calc(100% + 8px);
+      left: auto;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -421,10 +424,6 @@
     .dark-mode .bl-btn.active {
       background: #3730a3;
       color: #a5b4fc;
-    }
-    .dark-mode #toast {
-      background: #f8f9fa;
-      color: #121212;
     }
 
     .dark-mode #more-options-popover { background: #212529; box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05); }
@@ -638,17 +637,26 @@
       bottom: 64px;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background: #111827;
-      color: white;
+      background: #1e293b;
+      color: #ffffff;
       font-size: 13px;
       font-weight: 500;
       padding: 10px 18px;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.25s, transform 0.25s;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #toast svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -697,8 +705,13 @@
     .ntb-tabs {
       display: flex;
       align-items: center;
-      gap: 2px;
-      margin-bottom: 8px;
+      gap: 3px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .dark-mode .ntb-tabs {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
     }
     .ntb-tab {
       width: 32px; height: 32px;
@@ -710,9 +723,9 @@
       font-weight: 700;
       color: #6b7280;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.12s, color 0.12s;
+      transition: background 0.12s, color 0.12s, transform 0.12s;
     }
-    .ntb-tab:hover  { background: #f3f4f6; color: #111827; }
+    .ntb-tab:hover  { background: #f1f5f9; color: #111827; transform: translateY(-1px); }
     .ntb-tab.active { background: #ede9fe; color: #7c3aed; }
     .ntb-tab svg { width: 16px; height: 16px; }
 
@@ -817,34 +830,35 @@
     }
     .ntb-size-btn.active { border-color: #7c3aed; background: #ede9fe; }
 
-    /* Sub-tabs */
+    /* Segmented Sub-tabs */
     .ntb-subtabs {
       display: flex;
-      background: #f8fafc;
-      padding: 4px;
-      gap: 4px;
-      border-bottom: 1px solid #e2e8f0;
+      background: #f1f5f9;
+      padding: 3px;
+      gap: 2px;
+      border-radius: 9px;
+      margin-bottom: 8px;
     }
     .ntb-subtab {
       flex: 1;
-      padding: 6px 0;
-      font-size: 12px;
+      padding: 5px 0;
+      font-size: 11.5px;
       font-weight: 600;
       color: #64748b;
-      border-radius: 6px;
+      border-radius: 7px;
       border: none;
       background: transparent;
       cursor: pointer;
       transition: all 0.15s ease;
+      text-align: center;
     }
     .ntb-subtab:hover {
       color: #0f172a;
-      background: rgba(0,0,0,0.04);
     }
     .ntb-subtab.active {
       color: #7c3aed;
       background: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
 
     /* Image/Link inputs */
@@ -861,13 +875,14 @@
     }
     .ntb-text-input:focus { border-color: #7c3aed; }
     .ntb-apply-btn {
-      background: #7c3aed; color: #fff;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff;
       border: none; border-radius: 8px;
-      padding: 0 12px; font-size: 12px;
+      padding: 0 14px; font-size: 12px;
       font-weight: 600; cursor: pointer;
-      transition: background 0.1s;
+      transition: opacity 0.15s, transform 0.15s;
     }
-    .ntb-apply-btn:hover { background: #6d28d9; }
+    .ntb-apply-btn:hover { opacity: 0.92; transform: translateY(-1px); }
     
     .ntb-upload-btn:hover { background: #f9fafb; border-color: #7c3aed; color: #7c3aed; }
     .ntb-danger-btn {
@@ -886,69 +901,68 @@
       border-color: #fca5a5;
     }
 
-    /* Emoji grid */
-    .ntb-emoji-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
-    }
-    .ntb-emoji-item {
-      width: 26px; height: 26px;
-      border-radius: 6px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: 15px;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.1s;
-    }
-    .ntb-emoji-item:hover { background: #f3f4f6; }
-
-    /* Sub-tabs */
-    .ntb-subtabs {
-      display: flex;
-      border-bottom: 1px solid #e5e7eb;
-      margin-bottom: 4px;
-    }
-    .ntb-subtab {
-      flex: 1;
-      background: transparent;
-      border: none;
-      padding: 8px 4px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #6b7280;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .ntb-subtab:hover { color: #111827; }
-    .ntb-subtab.active { color: #7c3aed; border-bottom-color: #7c3aed; }
-    
     .ntb-subpanel.hidden { display: none; }
 
-    /* Search input */
+    /* Search input with right icon */
     .ntb-search-box {
       position: relative;
+      margin-bottom: 8px;
     }
-    .ntb-search-box svg {
+    .ntb-search-box .ntb-search-icon-right {
       position: absolute;
-      left: 8px; top: 50%;
+      right: 10px; top: 50%;
       transform: translateY(-50%);
       width: 14px; height: 14px;
       color: #9ca3af;
+      pointer-events: none;
     }
     .ntb-search-input {
       width: 100%;
-      padding: 6px 8px 6px 28px;
+      padding: 6px 30px 6px 10px;
       border: 1px solid #e5e7eb;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 12px;
       outline: none;
       background: #f9fafb;
+      font-family: 'Inter', sans-serif;
       transition: border-color 0.15s, background 0.15s;
+      box-sizing: border-box;
     }
     .ntb-search-input:focus { border-color: #7c3aed; background: #ffffff; }
+
+    /* Emoji Scrollable Container */
+    .ntb-emoji-scroll-container {
+      max-height: 195px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .ntb-emoji-scroll-container::-webkit-scrollbar {
+      width: 5px;
+    }
+    .ntb-emoji-scroll-container::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .dark-mode .ntb-emoji-scroll-container::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+
+    .ntb-category-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      margin: 8px 0 6px 2px;
+    }
+    .dark-mode .ntb-category-title {
+      color: #94a3b8;
+    }
+
+    .ntb-emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 3px;
+      margin-bottom: 8px;
+    }
 
     /* ═══════════════════════════════════════
        MEDIA & ICON POSITIONING IN ME-TPC
@@ -1001,6 +1015,114 @@
       flex-direction: column !important;
       align-items: center !important;
       gap: 4px !important;
+    }
+
+    span.icons {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    span.icons .icon-svg-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    span.icons svg {
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+      display: inline-block;
+    }
+
+    /* Icon tab color row */
+    .ntb-icon-color-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+    .ntb-icon-color-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+    }
+    .ntb-icon-color-swatches {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .ntb-icon-color-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: transform 0.1s ease, border-color 0.1s ease;
+    }
+    .ntb-icon-color-dot:hover { transform: scale(1.2); }
+    .ntb-icon-color-dot.active { border-color: #7c3aed; transform: scale(1.2); }
+
+    /* SVG Icon Grid Item */
+    .ntb-svg-icon-item {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #334155;
+      transition: all 0.15s ease;
+    }
+    .ntb-svg-icon-item:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #e2e8f0;
+    }
+    .ntb-svg-icon-item.active {
+      background: #f3e8ff;
+      border-color: #c084fc;
+      color: #7c3aed;
+    }
+    .ntb-svg-icon-item svg {
+      width: 18px; height: 18px;
+      pointer-events: none;
+    }
+
+    .dark-mode .ntb-svg-icon-item { color: #cbd5e1; }
+    .dark-mode .ntb-svg-icon-item:hover { background: #2b3036; color: #ffffff; border-color: #343a40; }
+    .dark-mode .ntb-svg-icon-item.active { background: #3b0764; border-color: #a855f7; color: #c084fc; }
+
+    /* Icon Preview Card (Matches screenshot) */
+    .ntb-icon-preview-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      margin-top: 8px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+    }
+    .dark-mode .ntb-icon-preview-card {
+      background: #181b1e;
+      border-color: #2b3036;
+    }
+    .ntb-icon-preview-svg {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      color: #7c3aed;
+    }
+    .ntb-icon-preview-svg svg {
+      width: 24px; height: 24px;
+    }
+    .ntb-icon-preview-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    .dark-mode .ntb-icon-preview-name {
+      color: #f8fafc;
     }
 
     me-tpc[data-media-type] > img {
@@ -1071,11 +1193,13 @@
     }
     .dark-mode .ntb-custom-picker-btn { background: #121212; border-color: #343a40; }
     .dark-mode .ntb-custom-picker-btn svg { color: #ced4da; }
-    .dark-mode .ntb-subtabs { border-color: #343a40; }
-    .dark-mode .ntb-subtab { color: #adb5bd; }
-    .dark-mode .ntb-subtab:hover { color: #f8f9fa; }
-    .dark-mode .ntb-subtab.active { color: #a5b4fc; border-bottom-color: #a5b4fc; }
-    .dark-mode .ntb-search-input { background: #212529; border-color: #495057; color: #f8f9fa; }
+    .dark-mode .ntb-subtabs { background: #1a1d20; border-color: #2b3036; }
+    .dark-mode .ntb-subtab { color: #94a3b8; }
+    .dark-mode .ntb-subtab:hover { color: #f8fafc; background: rgba(255, 255, 255, 0.08); }
+    .dark-mode .ntb-subtab.active { color: #c084fc; background: #2b3036; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+    .dark-mode .ntb-search-input { background: #121212; border-color: #343a40; color: #f8fafc; }
+    .dark-mode .ntb-emoji-item:hover { background: #2b3036; }
+    .dark-mode #ntb-img-type-select { background: #121212; border-color: #343a40; color: #f8fafc; }
     /* ═══════════════════════════════════════
        CONTEXT MENU STYLES & ACCESSIBILITY FIX
     ═══════════════════════════════════════ */
@@ -1135,6 +1259,228 @@
       background: #343a40 !important;
       color: #94a3b8 !important;
       border-color: #495057 !important;
+    }
+
+    /* ═══════════════════════════════════════
+       MOBILE QUICK ACTION BAR
+    ═══════════════════════════════════════ */
+    #mobile-quick-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4000;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px) saturate(190%);
+      -webkit-backdrop-filter: blur(20px) saturate(190%);
+      padding: 6px 8px;
+      border-radius: 16px;
+      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dark-mode #mobile-quick-bar {
+      background: rgba(26, 29, 33, 0.94);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .mqb-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      min-width: 52px;
+      height: 44px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #334155;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .dark-mode .mqb-btn { color: #cbd5e1; }
+    .mqb-btn:hover, .mqb-btn:active {
+      background: #f1f5f9;
+      color: #7c3aed;
+      transform: translateY(-1px);
+    }
+    .dark-mode .mqb-btn:hover, .dark-mode .mqb-btn:active {
+      background: #2b3036;
+      color: #a5b4fc;
+    }
+    .mqb-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .mqb-btn.mqb-danger {
+      color: #ef4444;
+    }
+    .mqb-btn.mqb-danger:hover, .mqb-btn.mqb-danger:active {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+    .dark-mode .mqb-btn.mqb-danger:hover, .dark-mode .mqb-btn.mqb-danger:active {
+      background: #450a0a;
+      color: #fca5a5;
+    }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE DESIGN (PHONES & TABLETS)
+    ═══════════════════════════════════════ */
+
+    /* Tablets (<= 1024px) */
+    @media (max-width: 1024px) {
+      #map-title-display {
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .header-right {
+        gap: 4px;
+        padding: 4px 6px;
+      }
+      .header-icon-btn, .rt-btn {
+        width: 34px; height: 34px;
+      }
+      #shortcuts-panel {
+        right: 16px;
+        max-width: calc(100vw - 32px);
+      }
+    }
+
+    /* Hide Mobile Quick Bar on Desktop Screens */
+    @media (min-width: 769px) and (min-height: 551px) {
+      #mobile-quick-bar {
+        display: none !important;
+      }
+    }
+
+    /* Mobile & Tablet (Portrait <= 768px OR Landscape height <= 550px) */
+    @media (max-width: 768px), (max-height: 550px) and (max-width: 1024px) {
+      #header {
+        top: 8px; left: 8px; right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+      }
+      .header-left {
+        padding: 4px 8px;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      /* Truncate map title to show first 4-5 letters on mobile/tablet */
+      #map-title-display {
+        max-width: 52px !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12.5px;
+      }
+
+      /* Hide bulky desktop middle toolbar on phone/tablet screens */
+      #right-toolbar, .desktop-only {
+        display: none !important;
+      }
+
+      .header-right {
+        display: flex !important;
+        padding: 3px 6px;
+        gap: 3px;
+        flex-shrink: 0;
+      }
+
+      .mobile-undo-btn, .mobile-redo-btn {
+        display: flex !important;
+      }
+
+      /* Position menu popover under right three-dots button */
+      #more-options-popover {
+        right: 8px !important;
+        left: auto !important;
+        width: 220px !important;
+      }
+      #theme-flyout-panel {
+        position: relative !important;
+        right: auto !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin-top: 6px;
+        box-shadow: none !important;
+      }
+
+      /* Hide desktop bottom pills on mobile/tablet to prevent canvas clutter */
+      #bottom-left, #bottom-right {
+        display: none !important;
+      }
+
+      /* Mobile Bottom Sheet for Node Toolbar */
+      #node-toolbar {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: auto !important;
+        max-height: 65vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        padding: 14px 16px 28px !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
+        z-index: 9000 !important;
+        transform: translateY(0) !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
+        overflow-y: auto !important;
+      }
+      #node-toolbar.hidden {
+        transform: translateY(100%) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        display: block !important;
+      }
+      #node-toolbar::after {
+        display: none !important;
+      }
+
+      /* Floating Mobile Dock at bottom */
+      #mobile-quick-bar {
+        display: flex !important;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100vw - 24px);
+        max-width: 420px;
+        justify-content: space-around;
+        padding: 4px 6px;
+        z-index: 8000;
+      }
+
+      /* Toast notification on mobile */
+      #toast {
+        bottom: 70px;
+        max-width: calc(100vw - 32px);
+        font-size: 12px;
+        padding: 8px 14px;
+      }
+    }
+
+    .mobile-undo-btn, .mobile-redo-btn {
+      display: none;
     }
 
     /* ═══════════════════════════════════════
@@ -1350,12 +1696,12 @@
     }
   </style>
 </head>
-<body>
+<body class="dark-mode">
 
   <!-- ══ TOP HEADER ══ -->
   <div id="header">
 
-    <!-- Left section: logo + title + search -->
+    <!-- Left section: logo + title -->
     <div class="header-left">
       <div class="logo-icon">M</div>
 
@@ -1365,20 +1711,25 @@
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/>
         </svg>
       </div>
-
-      <div class="more-options-btn" id="more-options-toggle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="1"></circle>
-          <circle cx="12" cy="5" r="1"></circle>
-          <circle cx="12" cy="19" r="1"></circle>
-        </svg>
-      </div>
     </div>
     
     <div id="more-options-popover">
+      <button class="mo-btn" id="mo-share" style="color: #7c3aed; font-weight: 600;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Share Map
+      </button>
+      <button class="mo-btn" id="mo-save">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Map
+      </button>
+      <div class="mo-divider"></div>
       <button class="mo-btn" id="rt-new">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
         New Map
+      </button>
+      <button class="mo-btn" id="mo-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>
+        Center View
       </button>
 
       <div class="mo-item-wrapper">
@@ -1398,8 +1749,8 @@
       </div>
 
       <button class="mo-btn" id="rt-darkmode">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        Dark Mode
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        Light Mode
       </button>
       <div class="mo-divider"></div>
       <button class="mo-btn" id="rt-export">
@@ -1409,6 +1760,11 @@
       <button class="mo-btn" id="rt-import">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Import JSON
+      </button>
+      <div class="mo-divider"></div>
+      <button class="mo-btn" id="rt-clear" style="color: #ef4444;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        Clear Canvas
       </button>
     </div>
 
@@ -1445,31 +1801,47 @@
 
     <div class="header-spacer"></div>
 
-    <!-- Right section: actions + avatar -->
+    <!-- Right section: actions + avatar + menu -->
     <div class="header-right">
-      <button class="header-icon-btn" id="btn-save" title="Save">
+      <button class="header-icon-btn mobile-undo-btn" id="m-rt-undo" title="Undo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+      </button>
+
+      <button class="header-icon-btn mobile-redo-btn" id="m-rt-redo" title="Redo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 014-4h12"/></svg>
+      </button>
+
+      <button class="header-icon-btn desktop-only" id="btn-save" title="Save">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
           <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
         </svg>
       </button>
 
-      <button class="header-icon-btn" id="btn-present" title="Present">
+      <button class="header-icon-btn" id="btn-present" title="Presentation Mode">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="2" y="3" width="20" height="14" rx="2"/>
           <path d="M8 21h8M12 17v4"/>
         </svg>
       </button>
 
-      <button class="btn-share" id="btn-share">
+      <button class="btn-share desktop-only" id="btn-share">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
           <polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
         </svg>
-        Share
+        <span>Share</span>
       </button>
 
-      <div class="avatar" title="My account">Y</div>
+      <div class="avatar desktop-only" title="My account">Y</div>
+
+      <div class="more-options-btn" id="more-options-toggle" title="More Options">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1"></circle>
+          <circle cx="12" cy="5" r="1"></circle>
+          <circle cx="12" cy="19" r="1"></circle>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -1730,25 +2102,44 @@
 
       <!-- Sub-panel: Icon -->
       <div class="ntb-subpanel hidden" id="ntb-sub-icon">
-        <div style="padding: 8px;">
+        <div style="padding: 8px 4px 4px 8px;">
+          <!-- Search box -->
           <div class="ntb-search-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search icons..." class="ntb-search-input" />
+            <input type="text" id="ntb-icon-search" placeholder="Search icons" class="ntb-search-input" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ntb-search-icon-right"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
-          <p class="ntb-label" style="margin-top:10px">Business</p>
-          <div class="ntb-emoji-grid" id="ntb-icon-grid"></div>
+
+          <!-- Color picker row -->
+          <div class="ntb-icon-color-row">
+            <span class="ntb-icon-color-label">COLOR:</span>
+            <div class="ntb-icon-color-swatches" id="ntb-icon-color-swatches"></div>
+            <label class="ntb-custom-picker-btn" title="Pick custom icon color">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+              <input type="color" id="ntb-icon-custom-color" value="#7c3aed" class="ntb-color-input-hidden" />
+            </label>
+          </div>
+
+          <!-- Scrollable Icons Container -->
+          <div id="ntb-icon-container" class="ntb-emoji-scroll-container"></div>
+
+          <!-- Selected Icon Preview Card -->
+          <div id="ntb-icon-preview-card" class="ntb-icon-preview-card">
+            <div id="ntb-icon-preview-svg" class="ntb-icon-preview-svg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <span id="ntb-icon-preview-name" class="ntb-icon-preview-name">Briefcase</span>
+          </div>
         </div>
       </div>
 
       <!-- Sub-panel: Emoji -->
       <div class="ntb-subpanel hidden" id="ntb-sub-emoji">
-        <div style="padding: 8px;">
+        <div style="padding: 8px 4px 4px 8px;">
           <div class="ntb-search-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search emoji..." class="ntb-search-input" />
+            <input type="text" id="ntb-emoji-search" placeholder="Search" class="ntb-search-input" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ntb-search-icon-right"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
-          <p class="ntb-label" style="margin-top:10px">Frequently Used</p>
-          <div class="ntb-emoji-grid" id="ntb-emoji-grid"></div>
+          <div id="ntb-emoji-container" class="ntb-emoji-scroll-container"></div>
         </div>
       </div>
     </div>
@@ -1789,6 +2180,30 @@
 
   </div>
 
+  <!-- ══ MOBILE QUICK ACTION BAR (PHONES & TABLETS) ══ -->
+  <div id="mobile-quick-bar">
+    <button class="mqb-btn" id="mqb-add-child" title="Add Subnode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>+ Child</span>
+    </button>
+    <button class="mqb-btn" id="mqb-add-sibling" title="Add Sibling Node">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 3v12"/><path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 15a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/><path d="M6 9h9"/></svg>
+      <span>+ Sibling</span>
+    </button>
+    <button class="mqb-btn" id="mqb-edit" title="Edit Topic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>Edit</span>
+    </button>
+    <button class="mqb-btn" id="mqb-format" title="Format & Style">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>
+      <span>Style</span>
+    </button>
+    <button class="mqb-btn mqb-danger" id="mqb-delete" title="Delete Node">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <span>Delete</span>
+    </button>
+  </div>
+
   <!-- Hidden dev test maps -->
   <div id="map2-wrapper"><div id="map2"></div></div>
   <div id="ssr"></div>
@@ -1801,7 +2216,17 @@
     /* ── More Options Toggle ── */
     document.getElementById('more-options-toggle').addEventListener('click', (e) => {
       e.stopPropagation()
-      document.getElementById('more-options-popover').classList.toggle('visible')
+      const popover = document.getElementById('more-options-popover')
+      const toggle = document.getElementById('more-options-toggle')
+      const rect = toggle.getBoundingClientRect()
+
+      popover.style.position = 'fixed'
+      popover.style.top = (rect.bottom + 8) + 'px'
+      const rightOffset = Math.max(8, window.innerWidth - rect.right)
+      popover.style.right = rightOffset + 'px'
+      popover.style.left = 'auto'
+
+      popover.classList.toggle('visible')
     })
     document.addEventListener('click', (e) => {
       if (!e.target.closest('#more-options-popover') && !e.target.closest('#more-options-toggle')) {
@@ -1810,10 +2235,43 @@
     })
 
     /* ── helpers ── */
-    function toast(msg, color = '#111827') {
+    function toast(msg, type = 'info', iconSvg = '') {
       const t = document.getElementById('toast')
-      t.textContent = msg
-      t.style.background = color
+      const isDark = document.body.classList.contains('dark-mode')
+
+      let bg = '#1e293b'
+      let fg = '#ffffff'
+      let border = '1px solid rgba(255,255,255,0.1)'
+      let defaultIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+
+      if (type === 'success' || type === '#16a34a') {
+        bg = isDark ? '#064e3b' : '#f0fdf4'
+        fg = isDark ? '#a7f3d0' : '#15803d'
+        border = isDark ? '1px solid #047857' : '1px solid #bbf7d0'
+      } else if (type === 'error' || type === 'danger' || type === '#dc2626') {
+        bg = isDark ? '#7f1d1d' : '#fef2f2'
+        fg = isDark ? '#fecaca' : '#991b1b'
+        border = isDark ? '1px solid #b91c1c' : '1px solid #fecaca'
+      } else if (type === 'blue' || type === '#2563eb') {
+        bg = isDark ? '#1e3a8a' : '#eff6ff'
+        fg = isDark ? '#bfdbfe' : '#1d4ed8'
+        border = isDark ? '1px solid #1d4ed8' : '1px solid #bfdbfe'
+      } else if (type === 'purple' || type === '#7c3aed') {
+        bg = isDark ? '#4c1d95' : '#f5f3ff'
+        fg = isDark ? '#ddd6fe' : '#6d28d9'
+        border = isDark ? '1px solid #6d28d9' : '1px solid #ddd6fe'
+      } else {
+        // Default info
+        bg = isDark ? '#27272a' : '#ffffff'
+        fg = isDark ? '#f4f4f5' : '#0f172a'
+        border = isDark ? '1px solid #3f3f46' : '1px solid #e2e8f0'
+      }
+
+      const icon = iconSvg || defaultIcon
+      t.innerHTML = `${icon}<span>${msg}</span>`
+      t.style.background = bg
+      t.style.color = fg
+      t.style.border = border
       t.classList.add('show')
       clearTimeout(t._t)
       t._t = setTimeout(() => t.classList.remove('show'), 2200)
@@ -1859,10 +2317,72 @@
 
     /* ── Zoom display ── */
     waitForMind(function(mind) {
+      setTimeout(() => { mind.toCenter() }, 100)
+      window.addEventListener('resize', () => { mind.toCenter() })
+
       function updateZoom() {
         const scale = Math.round((mind.scaleVal || 1) * 100)
         document.getElementById('zoom-display').textContent = scale + '%'
       }
+
+      /* ── Mobile Header Buttons ── */
+      document.getElementById('m-rt-undo')?.addEventListener('click', () => { mind.undo() })
+      document.getElementById('m-rt-redo')?.addEventListener('click', () => { mind.redo() })
+      document.getElementById('mo-share')?.addEventListener('click', () => {
+        document.getElementById('btn-share').click()
+        document.getElementById('more-options-popover').classList.remove('visible')
+      })
+      document.getElementById('mo-search')?.addEventListener('click', () => {
+        toast('Search clicked')
+        document.getElementById('more-options-popover').classList.remove('visible')
+      })
+      document.getElementById('mo-save')?.addEventListener('click', () => {
+        document.getElementById('btn-save').click()
+        document.getElementById('more-options-popover').classList.remove('visible')
+      })
+      document.getElementById('mo-center')?.addEventListener('click', () => {
+        mind.toCenter()
+        document.getElementById('more-options-popover').classList.remove('visible')
+      })
+
+      /* ── Mobile Quick Action Bar Handlers ── */
+      document.getElementById('mqb-add-child').addEventListener('click', () => {
+        mind.addChild()
+      })
+      document.getElementById('mqb-add-sibling').addEventListener('click', () => {
+        mind.insertSibling('after')
+      })
+      document.getElementById('mqb-edit').addEventListener('click', () => {
+        if (mind.currentNode) {
+          mind.beginEdit(mind.currentNode)
+        } else {
+          toast('Select a node to edit')
+        }
+      })
+      document.getElementById('mqb-format').addEventListener('click', (e) => {
+        e.stopPropagation()
+        if (mind.currentNode) {
+          const toolbar = document.getElementById('node-toolbar')
+          toolbar.classList.toggle('hidden')
+          if (!toolbar.classList.contains('hidden')) {
+            const rect = mind.currentNode.getBoundingClientRect()
+            toolbar.style.top = Math.max(80, rect.top - 120) + 'px'
+            toolbar.style.left = '50%'
+            toolbar.style.transform = 'translateX(-50%)'
+          }
+        } else {
+          toast('Select a node to format')
+        }
+      })
+      document.getElementById('mqb-delete').addEventListener('click', () => {
+        if (mind.currentNodes && mind.currentNodes.length > 0) {
+          mind.removeNodes(mind.currentNodes)
+        } else if (mind.currentNode) {
+          mind.removeNodes([mind.currentNode])
+        } else {
+          toast('Select a node to delete')
+        }
+      })
 
       /* ── Layout Popover ── */
       const layoutToggle = document.getElementById('bl-layout-icon')
@@ -1901,7 +2421,18 @@
         const title = titleInput.value || 'New Mind Map'
         mind.refresh(window.M.new(title))
         mind.toCenter()
-        toast('✨ New mind map created')
+        document.getElementById('more-options-popover').classList.remove('visible')
+        toast('New mind map created', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>')
+      })
+
+      /* ── Clear Canvas ── */
+      document.getElementById('rt-clear').addEventListener('click', () => {
+        if (!confirm('Are you sure you want to clear the canvas? All nodes will be removed.')) return
+        const title = titleInput.value || 'Main Topic'
+        mind.refresh(window.M.new(title))
+        mind.toCenter()
+        document.getElementById('more-options-popover').classList.remove('visible')
+        toast('Canvas cleared', '#dc2626', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>')
       })
 
       /* ── Save ── */
@@ -1909,15 +2440,15 @@
         const data = mind.getData()
         const title = titleInput.value || 'My Mind Map'
         localStorage.setItem('me-save', JSON.stringify({ title, data, at: new Date().toISOString() }))
-        toast('💾 Saved to browser', '#16a34a')
+        toast('Saved to browser', '#16a34a', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>')
       })
 
       /* ── Share ── */
       document.getElementById('btn-share').addEventListener('click', () => {
         const data = JSON.stringify(mind.getData())
         navigator.clipboard?.writeText(data)
-          .then(() => toast('📋 Map data copied to clipboard'))
-          .catch(() => toast('⚠️ Could not copy'))
+          .then(() => toast('Map data copied to clipboard', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>'))
+          .catch(() => toast('Could not copy', '#dc2626', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'))
       })
 
       /* ── Export JSON ── */
@@ -1931,7 +2462,7 @@
         a.download = title.replace(/\s+/g, '-').toLowerCase() + '.json'
         a.click()
         URL.revokeObjectURL(url)
-        toast('📥 JSON downloaded', '#2563eb')
+        toast('JSON downloaded', '#2563eb', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>')
       })
 
       /* ── Import JSON ── */
@@ -1949,9 +2480,9 @@
             titleDisplay.textContent = titleInput.value
             mind.refresh(data)
             mind.toCenter()
-            toast('📤 Map imported!', '#16a34a')
+            toast('Map imported successfully', '#16a34a', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>')
           } catch {
-            toast('❌ Invalid JSON file', '#dc2626')
+            toast('Invalid JSON file', '#dc2626', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>')
           }
         }
         reader.readAsText(file)
@@ -1968,7 +2499,7 @@
 
       /* ── Search ── */
       document.getElementById('rt-search').addEventListener('click', () => {
-        toast('🔍 Search clicked (Placeholder)')
+        toast('Search clicked (Placeholder)', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>')
       })
 
       /* ── Side Flyout Sub-Menu Controller ── */
@@ -2014,7 +2545,7 @@
             currentThemeIdx = idx
             mind.changeTheme({ ...mind.theme, palette: t.palette })
             renderFlyoutItems()
-            toast('🎨 Theme: ' + t.name, '#7c3aed')
+            toast('Theme: ' + t.name, '#7c3aed', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>')
             // Close both flyout and main popover when a theme is chosen
             themeFlyoutPanel.classList.remove('visible')
             document.getElementById('more-options-popover').classList.remove('visible')
@@ -2039,7 +2570,7 @@
       })
 
       /* ── Dark Mode ── */
-      let isDarkMode = false;
+      let isDarkMode = true;
       const darkModeBtn = document.getElementById('rt-darkmode');
       const moonIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark Mode`;
       const sunIconSvg  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Light Mode`;
@@ -2066,7 +2597,7 @@
               '--root-border-color': 'rgba(0, 0, 0, 0)'
             }
           });
-          toast('🌙 Dark mode enabled');
+          toast('Dark mode enabled', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>');
         } else {
           document.body.classList.remove('dark-mode');
           darkModeBtn.innerHTML = moonIconSvg;
@@ -2087,7 +2618,7 @@
               '--root-border-color': 'rgba(0, 0, 0, 0)'
             }
           });
-          toast('☀️ Light mode enabled');
+          toast('Light mode enabled', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>');
         }
       });
 
@@ -2191,26 +2722,235 @@
       buildSwatches('ntb-text-swatches',   applyTextColor)
       buildSwatches('ntb-branch-swatches', applyBranchColor)
 
-      /* ── Build emoji & icon grids ── */
-      const ICON_SET = ['💼','📈','🏢','📁','📅','📝','📊','💡','🎯','🔑','🚀','📱','🌐','🤖','🎨','🛠️','💬','📧','📦','💰','🔥']
-      const emojiGrid = document.getElementById('ntb-emoji-grid')
-      const iconGrid = document.getElementById('ntb-icon-grid')
-      
-      EMOJIS.forEach(em => {
-        const btn = document.createElement('button')
-        btn.className = 'ntb-emoji-item'
-        btn.textContent = em
-        btn.addEventListener('click', () => applyEmoji(em))
-        if(emojiGrid) emojiGrid.appendChild(btn)
-      })
+      /* ── Categorized Emoji Picker Logic ── */
+      const EMOJI_CATEGORIES = [
+        {
+          name: 'Frequently Used',
+          emojis: ['👍', '😘', '😁', '😍', '😆', '😜']
+        },
+        {
+          name: 'Smileys & People',
+          emojis: [
+            '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇',
+            '🥰', '😍', '🤩', '😘', '😗', '😚', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗',
+            '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '😌',
+            '😔', '😴', '😷', '🤒', '😎', '🤓', '🧐', '😕', '😟', '😮', '😯', '😲', '😳',
+            '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓',
+            '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '😈', '👿', '💀', '💩', '🤡', '🤖'
+          ]
+        },
+        {
+          name: 'Gestures & Hands',
+          emojis: ['👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏']
+        },
+        {
+          name: 'Objects & Symbols',
+          emojis: ['📌', '⭐', '🔥', '💡', '✅', '❌', '🚀', '💰', '📊', '🎯', '🔑', '⚠️', '🔒', '📱', '🌐', '💬', '📧', '📦', '🛠️', '🎨', '📅', '🎉', '🏆', '💎', '🔔']
+        }
+      ]
 
-      ICON_SET.forEach(em => {
-        const btn = document.createElement('button')
-        btn.className = 'ntb-emoji-item'
-        btn.textContent = em
-        btn.addEventListener('click', () => applyEmoji(em))
-        if(iconGrid) iconGrid.appendChild(btn)
-      })
+      const emojiContainer = document.getElementById('ntb-emoji-container')
+      const emojiSearchInput = document.getElementById('ntb-emoji-search')
+      const ICON_SET = ['💼','📈','🏢','📁','📅','📝','📊','💡','🎯','🔑','🚀','📱','🌐','🤖','🎨','🛠️','💬','📧','📦','💰','🔥']
+      const iconGrid = document.getElementById('ntb-icon-grid')
+
+      function renderEmojiPicker(filterText = '') {
+        if (!emojiContainer) return
+        emojiContainer.innerHTML = ''
+        const query = filterText.trim().toLowerCase()
+
+        EMOJI_CATEGORIES.forEach(cat => {
+          const matchingEmojis = query ? cat.emojis.filter(em => em.includes(query)) : cat.emojis
+          if (matchingEmojis.length === 0) return
+
+          const title = document.createElement('div')
+          title.className = 'ntb-category-title'
+          title.textContent = cat.name
+          emojiContainer.appendChild(title)
+
+          const grid = document.createElement('div')
+          grid.className = 'ntb-emoji-grid'
+
+          matchingEmojis.forEach(em => {
+            const btn = document.createElement('button')
+            btn.className = 'ntb-emoji-item'
+            btn.textContent = em
+            btn.title = em
+            btn.addEventListener('click', () => applyEmoji(em))
+            grid.appendChild(btn)
+          })
+
+          emojiContainer.appendChild(grid)
+        })
+
+        if (query && emojiContainer.children.length === 0) {
+          const emptyMsg = document.createElement('div')
+          emptyMsg.style.cssText = 'text-align: center; color: #94a3b8; font-size: 12px; padding: 20px 0;'
+          emptyMsg.textContent = 'No emojis found'
+          emojiContainer.appendChild(emptyMsg)
+        }
+      }
+
+      renderEmojiPicker()
+
+      if (emojiSearchInput) {
+        emojiSearchInput.addEventListener('input', (e) => {
+          renderEmojiPicker(e.target.value)
+        })
+      }
+
+      /* ── Vector SVG Icon Library Data & Logic ── */
+      let selectedIconColor = '#7c3aed'
+      const recentIcons = [
+        { id: 'briefcase', name: 'Briefcase', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>` },
+        { id: 'user-gear', name: 'User & Gear', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>` }
+      ]
+
+      const ICON_CATEGORIES = [
+        {
+          name: 'Recent',
+          icons: recentIcons
+        },
+        {
+          name: 'Business & Finance',
+          icons: [
+            { id: 'briefcase', name: 'Briefcase', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>` },
+            { id: 'chart-bar', name: 'Bar Chart', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>` },
+            { id: 'building', name: 'Building', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="10" y1="22" x2="10" y2="18"/><line x1="14" y1="18" x2="14" y2="22"/></svg>` },
+            { id: 'user-gear', name: 'User & Gear', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>` },
+            { id: 'activity', name: 'Pulse Activity', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>` },
+            { id: 'dollar-sign', name: 'Currency', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` }
+          ]
+        },
+        {
+          name: 'General & Tools',
+          icons: [
+            { id: 'target', name: 'Target', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>` },
+            { id: 'lightbulb', name: 'Idea Bulb', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15.09 14A6 6 0 0 0 18 9a6 6 0 0 0-12 0 6 6 0 0 0 2.91 5z"/></svg>` },
+            { id: 'rocket', name: 'Rocket', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-3.05 11a22.35 22.35 0 0 1-3.95 2z"/><path d="M9 12l-6 6"/><path d="M15 9l6-6"/></svg>` },
+            { id: 'star', name: 'Star', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></polygon></svg>` },
+            { id: 'shield', name: 'Shield Security', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>` },
+            { id: 'lock', name: 'Lock', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` },
+            { id: 'key', name: 'Key', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>` },
+            { id: 'check-circle', name: 'Check Circle', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>` },
+            { id: 'flag', name: 'Flag', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>` },
+            { id: 'globe', name: 'Globe Network', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>` },
+            { id: 'calendar', name: 'Calendar', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>` }
+          ]
+        }
+      ]
+
+      const iconContainer = document.getElementById('ntb-icon-container')
+      const iconSearchInput = document.getElementById('ntb-icon-search')
+      const iconColorSwatchesEl = document.getElementById('ntb-icon-color-swatches')
+      const iconCustomColorEl = document.getElementById('ntb-icon-custom-color')
+
+      const ICON_COLORS = ['#7c3aed', '#2563eb', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#111827', '#ffffff']
+
+      function renderIconColorSwatches() {
+        if (!iconColorSwatchesEl) return
+        iconColorSwatchesEl.innerHTML = ''
+        ICON_COLORS.forEach(color => {
+          const dot = document.createElement('div')
+          dot.className = 'ntb-icon-color-dot' + (selectedIconColor === color ? ' active' : '')
+          dot.style.background = color
+          if (color === '#ffffff') dot.style.boxShadow = 'inset 0 0 0 1px #cbd5e1'
+          dot.addEventListener('click', () => {
+            selectedIconColor = color
+            renderIconColorSwatches()
+            renderIconPicker(iconSearchInput ? iconSearchInput.value : '')
+          })
+          iconColorSwatchesEl.appendChild(dot)
+        })
+      }
+
+      if (iconCustomColorEl) {
+        iconCustomColorEl.addEventListener('input', (e) => {
+          selectedIconColor = e.target.value
+          renderIconColorSwatches()
+          renderIconPicker(iconSearchInput ? iconSearchInput.value : '')
+        })
+      }
+
+      function getColoredSvg(rawSvg, color) {
+        if (!rawSvg) return ''
+        return rawSvg.replace(/stroke="[^"]*"/g, `stroke="${color}"`).replace(/fill="(?!none)[^"]*"/g, `fill="${color}"`)
+      }
+
+      function applySvgIcon(iconObj) {
+        if (!currentNodeObj) return
+        delete currentNodeObj.image // Clear image if set
+        const coloredSvg = getColoredSvg(iconObj.svg, selectedIconColor)
+        currentNodeObj.icons = [coloredSvg]
+        if (!currentNodeObj.mediaPos) currentNodeObj.mediaPos = 'right'
+
+        // Add to recent if not present
+        if (!recentIcons.some(i => i.id === iconObj.id)) {
+          recentIcons.unshift(iconObj)
+          if (recentIcons.length > 6) recentIcons.pop()
+        }
+
+        // Update preview card
+        const previewSvg = document.getElementById('ntb-icon-preview-svg')
+        const previewName = document.getElementById('ntb-icon-preview-name')
+        if (previewSvg) {
+          previewSvg.innerHTML = coloredSvg
+          previewSvg.style.color = selectedIconColor
+        }
+        if (previewName) previewName.textContent = iconObj.name
+
+        mind.refresh(mind.getData())
+        syncToolbarState()
+        toast('Icon applied', 'success')
+      }
+
+      function renderIconPicker(filterText = '') {
+        if (!iconContainer) return
+        iconContainer.innerHTML = ''
+        const query = filterText.trim().toLowerCase()
+
+        ICON_CATEGORIES.forEach(cat => {
+          if (cat.icons.length === 0) return
+          const matchingIcons = query ? cat.icons.filter(i => i.name.toLowerCase().includes(query)) : cat.icons
+          if (matchingIcons.length === 0) return
+
+          const title = document.createElement('div')
+          title.className = 'ntb-category-title'
+          title.textContent = cat.name
+          iconContainer.appendChild(title)
+
+          const grid = document.createElement('div')
+          grid.className = 'ntb-emoji-grid'
+
+          matchingIcons.forEach(iconObj => {
+            const btn = document.createElement('button')
+            btn.className = 'ntb-svg-icon-item'
+            btn.innerHTML = getColoredSvg(iconObj.svg, selectedIconColor)
+            btn.title = iconObj.name
+
+            btn.addEventListener('click', () => applySvgIcon(iconObj))
+            grid.appendChild(btn)
+          })
+
+          iconContainer.appendChild(grid)
+        })
+
+        if (query && iconContainer.children.length === 0) {
+          const emptyMsg = document.createElement('div')
+          emptyMsg.style.cssText = 'text-align: center; color: #94a3b8; font-size: 12px; padding: 20px 0;'
+          emptyMsg.textContent = 'No icons found'
+          iconContainer.appendChild(emptyMsg)
+        }
+      }
+
+      renderIconColorSwatches()
+      renderIconPicker()
+
+      if (iconSearchInput) {
+        iconSearchInput.addEventListener('input', (e) => {
+          renderIconPicker(e.target.value)
+        })
+      }
 
       /* ── Tab switching ── */
       document.querySelectorAll('.ntb-tab').forEach(tab => {
@@ -2525,7 +3265,7 @@
           if (!root) return slides
           slides.push(root)
           function traverse(node) {
-            if (node.children && node.children.length) {
+            if (node.expanded !== false && node.children && node.children.length) {
               node.children.forEach(child => {
                 slides.push(child)
                 traverse(child)

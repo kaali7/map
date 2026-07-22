@@ -1,4 +1,5 @@
 import { rmSubline } from './nodeOperation'
+import { SIDE } from './const'
 import type { Topic, Wrapper } from './types/dom'
 import type { MindElixirData, MindElixirInstance, NodeObj } from './types/index'
 import { fillParent, getTranslate, setExpand } from './utils/index'
@@ -219,7 +220,7 @@ const getCenterDefault = (mei: MindElixirInstance, forceAlignNodes = false) => {
   const { container, map, nodes } = mei
 
   let dx, dy
-  if (mei.alignment === 'nodes' || forceAlignNodes) {
+  if (mei.alignment === 'nodes' || forceAlignNodes || (mei.direction !== SIDE && mei.alignment !== 'root')) {
     dx = (container.offsetWidth - nodes.offsetWidth) / 2
     dy = (container.offsetHeight - nodes.offsetHeight) / 2
     map.style.transformOrigin = `50% 50%`
@@ -228,18 +229,19 @@ const getCenterDefault = (mei: MindElixirInstance, forceAlignNodes = false) => {
     if (!root) return { dx: 0, dy: 0 }
 
     const nodesRect = nodes.getBoundingClientRect()
-    const rootRect = root.getBoundingClientRect()
-    const scale = mei.scaleVal || 1
+    const currentDomScale = (nodes.offsetWidth && nodesRect.width) ? (nodesRect.width / nodes.offsetWidth) : (mei.scaleVal || 1)
 
-    let pL = (rootRect.left - nodesRect.left) / scale
-    let pT = (rootRect.top - nodesRect.top) / scale
+    let pL = root.offsetLeft
+    let pT = root.offsetTop
+
+    if ((!pL && !pT) || isNaN(pL) || isNaN(pT)) {
+      const rootRect = root.getBoundingClientRect()
+      pL = (rootRect.left - nodesRect.left) / (currentDomScale || 1)
+      pT = (rootRect.top - nodesRect.top) / (currentDomScale || 1)
+    }
+
     const pW = root.offsetWidth
     const pH = root.offsetHeight
-
-    if (isNaN(pL) || isNaN(pT)) {
-      pL = root.offsetLeft
-      pT = root.offsetTop
-    }
 
     dx = container.offsetWidth / 2 - pL - pW / 2
     dy = container.offsetHeight / 2 - pT - pH / 2

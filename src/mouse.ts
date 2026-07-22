@@ -341,21 +341,14 @@ export default function (mind: MindElixirInstance) {
 
   const handleContextMenu = (e: MouseEvent) => {
     e.preventDefault()
-    // Only handle right-click for context menu
-    if (e.button !== 2) return
     if (!mind.editable) return
-    setTimeout(() => {
-      // On Mac trackpad, a two-finger press immediately fires `contextmenu`.
-      // Delay here to wait and see if the user is actually panning.
-      // If so, cancel the context menu.
-      if (mind.panHelper.moved) return
-      if (mind.ptState !== State.Idle && mind.ptState !== State.Pan) return
-      const target = e.target as HTMLElement
-      if (isTopic(target) && !target.classList.contains('selected')) {
-        mind.selectNode(target)
-      }
-      mind.bus.fire('showContextMenu', e)
-    }, 200)
+    if (mind.panHelper.moved) return
+    if (mind.ptState !== State.Idle && mind.ptState !== State.Pan) return
+    const target = e.target as HTMLElement
+    if (isTopic(target) && !target.classList.contains('selected')) {
+      mind.selectNode(target)
+    }
+    mind.bus.fire('showContextMenu', e)
   }
 
   const handleWheel = (e: WheelEvent) => {
