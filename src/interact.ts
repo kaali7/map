@@ -225,13 +225,25 @@ const getCenterDefault = (mei: MindElixirInstance, forceAlignNodes = false) => {
     map.style.transformOrigin = `50% 50%`
   } else {
     const root = map.querySelector('me-root') as HTMLElement
-    const pT = root.offsetTop
-    const pL = root.offsetLeft
+    if (!root) return { dx: 0, dy: 0 }
+
+    const nodesRect = nodes.getBoundingClientRect()
+    const rootRect = root.getBoundingClientRect()
+    const scale = mei.scaleVal || 1
+
+    let pL = (rootRect.left - nodesRect.left) / scale
+    let pT = (rootRect.top - nodesRect.top) / scale
     const pW = root.offsetWidth
     const pH = root.offsetHeight
+
+    if (isNaN(pL) || isNaN(pT)) {
+      pL = root.offsetLeft
+      pT = root.offsetTop
+    }
+
     dx = container.offsetWidth / 2 - pL - pW / 2
     dy = container.offsetHeight / 2 - pT - pH / 2
-    map.style.transformOrigin = `${pL + pW / 2}px 50%`
+    map.style.transformOrigin = `${pL + pW / 2}px ${pT + pH / 2}px`
   }
   return { dx, dy }
 }
@@ -311,7 +323,9 @@ export const cancelFocus = function (this: MindElixirInstance) {
 export const initLeft = function (this: MindElixirInstance) {
   this.direction = 0
   this.refresh()
-  this.toCenter()
+  requestAnimationFrame(() => {
+    this.toCenter()
+  })
   this.bus.fire('changeDirection', this.direction)
 }
 /**
@@ -324,7 +338,9 @@ export const initLeft = function (this: MindElixirInstance) {
 export const initRight = function (this: MindElixirInstance) {
   this.direction = 1
   this.refresh()
-  this.toCenter()
+  requestAnimationFrame(() => {
+    this.toCenter()
+  })
   this.bus.fire('changeDirection', this.direction)
 }
 /**
@@ -337,7 +353,9 @@ export const initRight = function (this: MindElixirInstance) {
 export const initSide = function (this: MindElixirInstance) {
   this.direction = 2
   this.refresh()
-  this.toCenter()
+  requestAnimationFrame(() => {
+    this.toCenter()
+  })
   this.bus.fire('changeDirection', this.direction)
 }
 

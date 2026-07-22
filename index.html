@@ -283,6 +283,101 @@
     }
 
     /* ═══════════════════════════════════════
+       SIDE FLYOUT SUB-MENU (Matches screenshot)
+    ═══════════════════════════════════════ */
+    #more-options-popover {
+      position: absolute;
+      overflow: visible !important;
+    }
+
+    .mo-item-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    #theme-flyout-panel {
+      position: absolute;
+      top: -6px;
+      left: calc(100% + 8px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.06);
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 220px;
+      z-index: 2200;
+    }
+    #theme-flyout-panel.visible { display: flex; }
+
+    .theme-flyout-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+      padding: 4px 8px 8px;
+      letter-spacing: -0.2px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 4px;
+    }
+
+    .theme-flyout-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #4b5563;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .theme-flyout-item:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .theme-flyout-item.active {
+      background: #ede9fe;
+      color: #7c3aed;
+      font-weight: 600;
+    }
+
+    .theme-flyout-swatches {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+    .theme-flyout-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    .mo-chevron-right {
+      width: 14px; height: 14px;
+      color: #9ca3af;
+      margin-left: auto;
+      transform: rotate(-90deg);
+      transition: transform 0.15s ease;
+    }
+
+    /* Dark Mode Flyout Panel */
+    .dark-mode #theme-flyout-panel {
+      background: rgba(26, 29, 33, 0.95);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+    .dark-mode .theme-flyout-title { color: #f8fafc; border-bottom-color: #2b3036; }
+    .dark-mode .theme-flyout-item { color: #94a3b8; }
+    .dark-mode .theme-flyout-item:hover { background: #2b3036; color: #ffffff; }
+    .dark-mode .theme-flyout-item.active { background: #3730a3; color: #a5b4fc; }
+
+    /* ═══════════════════════════════════════
        DARK MODE STYLES
     ═══════════════════════════════════════ */
     body.dark-mode {
@@ -1078,10 +1173,23 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
         New Map
       </button>
-      <button class="mo-btn" id="rt-palette">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>
-        Theme Colors
-      </button>
+
+      <div class="mo-item-wrapper">
+        <button class="mo-btn" id="rt-palette">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>
+          Theme Colors
+          <svg class="mo-chevron-right" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/>
+          </svg>
+        </button>
+
+        <!-- Side Flyout Panel -->
+        <div id="theme-flyout-panel">
+          <div class="theme-flyout-title">Theme Colors</div>
+          <div id="theme-flyout-list" style="display:flex; flex-direction:column; gap:2px;"></div>
+        </div>
+      </div>
+
       <button class="mo-btn" id="rt-darkmode">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         Dark Mode
@@ -1096,6 +1204,8 @@
         Import JSON
       </button>
     </div>
+
+
 
     <div id="right-toolbar">
       <div class="rt-group">
@@ -1634,27 +1744,84 @@
         toast('🔍 Search clicked (Placeholder)')
       })
 
-      /* ── Palette (cycle theme) ── */
+      /* ── Side Flyout Sub-Menu Controller ── */
       const themes = [
-        { name: 'Campaign', palette: ['#06b6d4','#8b5cf6','#ec4899','#10b981','#f59e0b','#ef4444','#6366f1'] },
-        { name: 'Sunset',   palette: ['#f43f5e','#fb923c','#fbbf24','#a3e635','#34d399','#38bdf8','#818cf8'] },
-        { name: 'Forest',   palette: ['#166534','#15803d','#4d7c0f','#92400e','#1e40af','#7e22ce','#be123c'] },
-        { name: 'Ocean',    palette: ['#0891b2','#0284c7','#1d4ed8','#4338ca','#7c3aed','#0d9488','#0f766e'] },
+        { name: 'Campaign',      palette: ['#06b6d4','#8b5cf6','#ec4899','#10b981','#f59e0b','#ef4444','#6366f1'] },
+        { name: 'Sunset Glow',   palette: ['#f43f5e','#fb923c','#fbbf24','#a3e635','#34d399','#38bdf8','#818cf8'] },
+        { name: 'Forest Breeze', palette: ['#166534','#15803d','#4d7c0f','#92400e','#1e40af','#7e22ce','#be123c'] },
+        { name: 'Ocean Depth',   palette: ['#0891b2','#0284c7','#1d4ed8','#4338ca','#7c3aed','#0d9488','#0f766e'] },
+        { name: 'Cyberpunk Neon',palette: ['#ff007f','#00f0ff','#7928ca','#ff003c','#ffe600','#00ff66','#9900ff'] },
+        { name: 'Lavender Mist', palette: ['#a855f7','#c084fc','#e879f9','#f472b6','#60a5fa','#818cf8','#38bdf8'] },
+        { name: 'Warm Ember',    palette: ['#dc2626','#ea580c','#d97706','#ca8a04','#65a30d','#059669','#0284c7'] },
+        { name: 'Pastel Dream',  palette: ['#f4a261','#e76f51','#2a9d8f','#e9c46a','#457b9d','#1d3557','#b5e2fa'] },
       ]
-      let themeIdx = 0
-      document.getElementById('rt-palette').addEventListener('click', () => {
-        themeIdx = (themeIdx + 1) % themes.length
-        const t = themes[themeIdx]
-        mind.changeTheme({ ...mind.theme, palette: t.palette })
-        toast('🎨 Theme: ' + t.name)
+      let currentThemeIdx = 0
+
+      const rtPaletteBtn = document.getElementById('rt-palette')
+      const themeFlyoutPanel = document.getElementById('theme-flyout-panel')
+      const themeFlyoutList = document.getElementById('theme-flyout-list')
+
+      function renderFlyoutItems() {
+        themeFlyoutList.innerHTML = ''
+        themes.forEach((t, idx) => {
+          const item = document.createElement('div')
+          item.className = 'theme-flyout-item' + (idx === currentThemeIdx ? ' active' : '')
+
+          const label = document.createElement('span')
+          label.textContent = t.name
+
+          const swatchRow = document.createElement('div')
+          swatchRow.className = 'theme-flyout-swatches'
+          t.palette.forEach(color => {
+            const dot = document.createElement('div')
+            dot.className = 'theme-flyout-dot'
+            dot.style.background = color
+            swatchRow.appendChild(dot)
+          })
+
+          item.appendChild(label)
+          item.appendChild(swatchRow)
+
+          item.addEventListener('click', (e) => {
+            e.stopPropagation()
+            currentThemeIdx = idx
+            mind.changeTheme({ ...mind.theme, palette: t.palette })
+            renderFlyoutItems()
+            toast('🎨 Theme: ' + t.name, '#7c3aed')
+            // Close both flyout and main popover when a theme is chosen
+            themeFlyoutPanel.classList.remove('visible')
+            document.getElementById('more-options-popover').classList.remove('visible')
+          })
+
+          themeFlyoutList.appendChild(item)
+        })
+      }
+
+      renderFlyoutItems()
+
+      rtPaletteBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        themeFlyoutPanel.classList.toggle('visible')
+      })
+
+      // Close flyout when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#more-options-popover')) {
+          themeFlyoutPanel.classList.remove('visible')
+        }
       })
 
       /* ── Dark Mode ── */
       let isDarkMode = false;
-      document.getElementById('rt-darkmode').addEventListener('click', () => {
+      const darkModeBtn = document.getElementById('rt-darkmode');
+      const moonIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark Mode`;
+      const sunIconSvg  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Light Mode`;
+
+      darkModeBtn.addEventListener('click', () => {
         isDarkMode = !isDarkMode;
         if (isDarkMode) {
           document.body.classList.add('dark-mode');
+          darkModeBtn.innerHTML = sunIconSvg;
           mind.changeTheme({
             ...mind.theme,
             cssVar: {
@@ -1672,6 +1839,7 @@
           toast('🌙 Dark mode enabled');
         } else {
           document.body.classList.remove('dark-mode');
+          darkModeBtn.innerHTML = moonIconSvg;
           mind.changeTheme({
             ...mind.theme,
             cssVar: {
