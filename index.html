@@ -3311,40 +3311,61 @@
          * Zoom to a node and precisely center it in the viewport.
          * Uses direct transform math instead of chained scale+scrollIntoView calls.
          */
-        function zoomToNode(tpcEl, targetScale) {
+        function zoomToNode(tpcEl) {
           const map = mind.map
           const container = mind.container
           const containerRect = container.getBoundingClientRect()
 
-          // Get node center in current viewport space
           const nodeRect = tpcEl.getBoundingClientRect()
+          const currentTransform = map.style.transform
+          const currentScale = mind.scaleVal || 1
+
+          // Calculate unscaled node width & height
+          const nodeWidth = nodeRect.width / currentScale
+          const nodeHeight = nodeRect.height / currentScale
+
+          const isMobile = window.innerWidth <= 768 || window.innerHeight <= 550
+          const topOffset = isMobile ? 44 : 54
+          const bottomOffset = isMobile ? 74 : 64
+
+          // Available visible area inside presentation viewport (82% width margin for text fit)
+          const availWidth = containerRect.width * 0.82
+          const availHeight = (containerRect.height - topOffset - bottomOffset) * 0.75
+
+          // Dynamically compute target scale so node text fits completely in visible viewport
+          const fitScaleX = availWidth / Math.max(1, nodeWidth)
+          const fitScaleY = availHeight / Math.max(1, nodeHeight)
+          let targetScale = Math.min(fitScaleX, fitScaleY)
+
+          const minScale = 0.75
+          const maxScale = isMobile ? 1.25 : 1.75
+          targetScale = Math.max(minScale, Math.min(maxScale, targetScale))
+
+          // Visible viewport center
+          const visibleCenterX = containerRect.left + containerRect.width / 2
+          const visibleCenterY = containerRect.top + topOffset + (containerRect.height - topOffset - bottomOffset) / 2
+
+          // Current node center in viewport space
           const nodeCenterX = nodeRect.left + nodeRect.width / 2
           const nodeCenterY = nodeRect.top + nodeRect.height / 2
 
-          // Current transform state
-          const currentTransform = map.style.transform
-          const currentScale = mind.scaleVal || 1
           const { x: currentTx, y: currentTy } = getTranslateXY(currentTransform)
 
-          // Node center in map-local coordinates (unscaled, untranslated)
-          // viewport_pos = map_local_pos * scale + translate + containerCenter
-          const containerCenterX = containerRect.left + containerRect.width / 2
-          const containerCenterY = containerRect.top + containerRect.height / 2
+          // Node center in map-local coordinates
+          const nodeLocalX = (nodeCenterX - visibleCenterX - currentTx) / currentScale
+          const nodeLocalY = (nodeCenterY - visibleCenterY - currentTy) / currentScale
 
-          const nodeLocalX = (nodeCenterX - containerCenterX - currentTx) / currentScale
-          const nodeLocalY = (nodeCenterY - containerCenterY - currentTy) / currentScale
-
-          // New translate so node-local maps to viewport center at targetScale
+          // New translate so node-local maps to visible viewport center at targetScale
           const newTx = -nodeLocalX * targetScale
           const newTy = -nodeLocalY * targetScale
 
           // Apply with smooth transition
-          map.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+          map.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
           map.style.transform = `translate3d(${newTx}px, ${newTy}px, 0) scale(${targetScale})`
           mind.scaleVal = targetScale
 
           // Clear transition after animation
-          setTimeout(() => { map.style.transition = 'none' }, 700)
+          setTimeout(() => { map.style.transition = 'none' }, 550)
         }
 
         function goToSlide(idx) {
@@ -3380,12 +3401,8 @@
             })
             tpcEl.classList.add('present-focus')
 
-            // Determine zoom level based on node depth
-            const depth = getNodeDepth(slide)
-            const targetScale = depth === 0 ? 1.8 : depth === 1 ? 2.5 : 3.2
-
-            // Zoom and precisely center on this node
-            zoomToNode(tpcEl, targetScale)
+            // Zoom and precisely center on this node using dynamic fit scaling
+            zoomToNode(tpcEl)
           }
         }
 
