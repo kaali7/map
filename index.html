@@ -1141,6 +1141,213 @@
        FILE INPUT (hidden)
     ═══════════════════════════════════════ */
     #file-import { display: none; }
+
+    /* ═══════════════════════════════════════
+       PRESENTATION MODE
+    ═══════════════════════════════════════ */
+    #present-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: transparent;
+      display: none;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #present-overlay.active {
+      display: flex;
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    #present-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+      pointer-events: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    #present-overlay.active #present-topbar {
+      pointer-events: auto;
+    }
+
+    #present-title { color: #0f172a; font-size: 15px; font-weight: 700; }
+    #present-counter { font-variant-numeric: tabular-nums; color: #64748b; font-weight: 600; }
+    #present-exit {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      color: #334155;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    #present-exit:hover { background: #e2e8f0; color: #0f172a; }
+
+    #present-highlight {
+      display: none !important;
+    }
+
+    #present-nav {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid #e2e8f0;
+      border-radius: 40px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      z-index: 100001;
+      pointer-events: none;
+    }
+    #present-overlay.active #present-nav {
+      pointer-events: auto;
+    }
+    .present-nav-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #334155;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .present-nav-btn:hover { background: #ede9fe; border-color: #c084fc; color: #7c3aed; }
+    .present-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .present-nav-btn svg { width: 18px; height: 18px; }
+
+    #present-dots {
+      display: flex; gap: 6px; align-items: center;
+      max-width: 220px; overflow-x: auto;
+    }
+    .present-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #cbd5e1;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+      font-size: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      color: transparent;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .present-dot.active {
+      background: #7c3aed;
+      width: 36px;
+      height: 22px;
+      border-radius: 11px;
+      font-size: 11px;
+      color: #ffffff;
+      padding: 0 6px;
+    }
+
+    #present-node-label {
+      position: absolute;
+      bottom: 84px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 12px;
+      max-width: 60vw;
+      text-align: center;
+      pointer-events: none;
+      z-index: 100001;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transition: opacity 0.3s;
+    }
+
+    /* Dark mode presentation UI overrides */
+    .dark-mode #present-topbar {
+      background: rgba(26, 29, 32, 0.88);
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+    }
+    .dark-mode #present-title { color: #f8fafc; }
+    .dark-mode #present-counter { color: #94a3b8; }
+    .dark-mode #present-exit {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+    }
+    .dark-mode #present-exit:hover { background: rgba(255, 255, 255, 0.2); }
+    .dark-mode #present-nav {
+      background: rgba(26, 29, 32, 0.92);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .dark-mode .present-nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+    }
+    .dark-mode .present-nav-btn:hover {
+      background: #3730a3;
+      border-color: #a5b4fc;
+      color: #a5b4fc;
+    }
+    .dark-mode .present-dot { background: rgba(255, 255, 255, 0.25); }
+    .dark-mode .present-dot.active { background: #a855f7; color: #ffffff; }
+    .dark-mode #present-node-label {
+      background: rgba(26, 29, 32, 0.95);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Hide non-presentation UI during Presentation Mode */
+    body.is-presenting #header,
+    body.is-presenting #bottom-left,
+    body.is-presenting #bottom-right,
+    body.is-presenting #node-toolbar,
+    body.is-presenting #shortcuts-panel,
+    body.is-presenting #layout-popover,
+    body.is-presenting #more-options-popover,
+    body.is-presenting #title-popover,
+    body.is-presenting .context-menu {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* Presentation Mode: blur & fade out non-focused nodes */
+    body.is-presenting me-tpc {
+      transition: filter 0.4s ease, opacity 0.4s ease;
+    }
+    body.is-presenting me-tpc:not(.present-focus) {
+      filter: blur(1.5px);
+      opacity: 0.25;
+    }
+    body.is-presenting me-tpc.present-focus {
+      filter: none;
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -1353,6 +1560,26 @@
 
   <!-- ══ TOAST ══ -->
   <div id="toast"></div>
+
+  <!-- ══ PRESENTATION MODE OVERLAY ══ -->
+  <div id="present-overlay">
+    <div id="present-topbar">
+      <span id="present-title">Campaign Brainstorming</span>
+      <span id="present-counter">1 / 1</span>
+      <button id="present-exit">✕ Exit (Esc)</button>
+    </div>
+    <div id="present-highlight"></div>
+    <div id="present-node-label"></div>
+    <div id="present-nav">
+      <button class="present-nav-btn" id="present-prev" title="Previous (←)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div id="present-dots"></div>
+      <button class="present-nav-btn" id="present-next" title="Next (→)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
 
   <!-- ══ NODE CONTEXT TOOLBAR ══ -->
   <div id="node-toolbar" class="node-toolbar hidden">
@@ -2273,6 +2500,237 @@
       mind.container.addEventListener('wheel', () => {
         if (currentNodeTopic) positionToolbar(currentNodeTopic)
       }, { passive: true })
+
+      /* ═══════════════════════════════════════
+         PRESENTATION MODE LOGIC
+      ═══════════════════════════════════════ */
+      waitForMind(function(mind) {
+        const btnPresent = document.getElementById('btn-present')
+        const presentOverlay = document.getElementById('present-overlay')
+        const presentHighlight = document.getElementById('present-highlight')
+        const presentNodeLabel = document.getElementById('present-node-label')
+        const presentCounter = document.getElementById('present-counter')
+        const presentTitle = document.getElementById('present-title')
+        const presentDots = document.getElementById('present-dots')
+        const presentPrevBtn = document.getElementById('present-prev')
+        const presentNextBtn = document.getElementById('present-next')
+        const presentExitBtn = document.getElementById('present-exit')
+
+        let presentSlides = []
+        let presentIdx = 0
+        let savedScaleVal = 1
+
+        function collectSlides(root) {
+          const slides = []
+          if (!root) return slides
+          slides.push(root)
+          function traverse(node) {
+            if (node.children && node.children.length) {
+              node.children.forEach(child => {
+                slides.push(child)
+                traverse(child)
+              })
+            }
+          }
+          traverse(root)
+          return slides
+        }
+
+        function getNodeDepth(node) {
+          let depth = 0
+          let current = node
+          while (current && current.parent) {
+            depth++
+            current = current.parent
+          }
+          return depth
+        }
+
+        /**
+         * Parse translate3d values from a CSS transform string.
+         */
+        function getTranslateXY(transformStr) {
+          const match = transformStr.match(/translate3d\(([\d.+-]+)px,\s*([\d.+-]+)px/)
+          return match ? { x: parseFloat(match[1]), y: parseFloat(match[2]) } : { x: 0, y: 0 }
+        }
+
+        /**
+         * Zoom to a node and precisely center it in the viewport.
+         * Uses direct transform math instead of chained scale+scrollIntoView calls.
+         */
+        function zoomToNode(tpcEl, targetScale) {
+          const map = mind.map
+          const container = mind.container
+          const containerRect = container.getBoundingClientRect()
+
+          // Get node center in current viewport space
+          const nodeRect = tpcEl.getBoundingClientRect()
+          const nodeCenterX = nodeRect.left + nodeRect.width / 2
+          const nodeCenterY = nodeRect.top + nodeRect.height / 2
+
+          // Current transform state
+          const currentTransform = map.style.transform
+          const currentScale = mind.scaleVal || 1
+          const { x: currentTx, y: currentTy } = getTranslateXY(currentTransform)
+
+          // Node center in map-local coordinates (unscaled, untranslated)
+          // viewport_pos = map_local_pos * scale + translate + containerCenter
+          const containerCenterX = containerRect.left + containerRect.width / 2
+          const containerCenterY = containerRect.top + containerRect.height / 2
+
+          const nodeLocalX = (nodeCenterX - containerCenterX - currentTx) / currentScale
+          const nodeLocalY = (nodeCenterY - containerCenterY - currentTy) / currentScale
+
+          // New translate so node-local maps to viewport center at targetScale
+          const newTx = -nodeLocalX * targetScale
+          const newTy = -nodeLocalY * targetScale
+
+          // Apply with smooth transition
+          map.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+          map.style.transform = `translate3d(${newTx}px, ${newTy}px, 0) scale(${targetScale})`
+          mind.scaleVal = targetScale
+
+          // Clear transition after animation
+          setTimeout(() => { map.style.transition = 'none' }, 700)
+        }
+
+        function goToSlide(idx) {
+          if (idx < 0 || idx >= presentSlides.length) return
+          presentIdx = idx
+          const slide = presentSlides[idx]
+
+          // Update counter & buttons
+          presentCounter.textContent = `${idx + 1} / ${presentSlides.length}`
+          presentPrevBtn.disabled = idx === 0
+          presentNextBtn.disabled = idx === presentSlides.length - 1
+
+          // Update dots
+          Array.from(presentDots.children).forEach((dot, i) => {
+            dot.classList.toggle('active', i === idx)
+          })
+
+          // Update label
+          presentNodeLabel.textContent = slide.topic || ''
+
+          // Find element
+          let tpcEl
+          try {
+            tpcEl = mind.findEle(slide.id)
+          } catch (e) {
+            tpcEl = null
+          }
+
+          if (tpcEl) {
+            // Clear previous focus class from all nodes
+            mind.map.querySelectorAll('me-tpc.present-focus').forEach(el => {
+              el.classList.remove('present-focus')
+            })
+            tpcEl.classList.add('present-focus')
+
+            // Determine zoom level based on node depth
+            const depth = getNodeDepth(slide)
+            const targetScale = depth === 0 ? 1.8 : depth === 1 ? 2.5 : 3.2
+
+            // Zoom and precisely center on this node
+            zoomToNode(tpcEl, targetScale)
+          }
+        }
+
+        function buildDots() {
+          presentDots.innerHTML = ''
+          presentSlides.forEach((_, i) => {
+            const dot = document.createElement('div')
+            dot.className = 'present-dot' + (i === 0 ? ' active' : '')
+            dot.style.cursor = 'pointer'
+            dot.dataset.idx = i
+            dot.textContent = i + 1  // store the 1-based number in all dots
+            dot.addEventListener('click', () => goToSlide(i))
+            presentDots.appendChild(dot)
+          })
+        }
+
+        function handlePresentKeydown(e) {
+          if (!presentOverlay.classList.contains('active')) return
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault()
+            if (presentIdx < presentSlides.length - 1) goToSlide(presentIdx + 1)
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault()
+            if (presentIdx > 0) goToSlide(presentIdx - 1)
+          } else if (e.key === 'Escape') {
+            e.preventDefault()
+            exitPresentMode()
+          }
+        }
+
+        function enterPresentMode() {
+          const titleText = document.getElementById('map-title-display')?.textContent || 'Mind Map'
+          presentTitle.textContent = titleText
+
+          presentSlides = collectSlides(mind.nodeData)
+          if (presentSlides.length === 0) return
+
+          savedScaleVal = mind.scaleVal || 1
+
+          document.body.classList.add('is-presenting')
+          presentOverlay.classList.add('active')
+
+          // Fullscreen if supported
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(() => {})
+          }
+
+          buildDots()
+          goToSlide(0)
+
+          window.addEventListener('keydown', handlePresentKeydown)
+        }
+
+        function exitPresentMode() {
+          document.body.classList.remove('is-presenting')
+          presentOverlay.classList.remove('active')
+          presentHighlight.classList.remove('visible')
+          window.removeEventListener('keydown', handlePresentKeydown)
+
+          // Remove all present-focus classes to restore normal node appearance
+          if (mind.map) {
+            mind.map.querySelectorAll('me-tpc.present-focus').forEach(el => {
+              el.classList.remove('present-focus')
+            })
+          }
+
+          if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {})
+          }
+
+          // Restore scale and center in one smooth motion
+          // Set scaleVal first so toCenter uses the right scale
+          mind.scaleVal = savedScaleVal
+          mind.map.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+          mind.toCenter()
+          setTimeout(() => {
+            mind.map.style.transition = 'none'
+          }, 600)
+        }
+
+        btnPresent.addEventListener('click', enterPresentMode)
+        presentExitBtn.addEventListener('click', exitPresentMode)
+        presentPrevBtn.addEventListener('click', () => {
+          if (presentIdx > 0) goToSlide(presentIdx - 1)
+        })
+        presentNextBtn.addEventListener('click', () => {
+          if (presentIdx < presentSlides.length - 1) goToSlide(presentIdx + 1)
+        })
+
+        window.addEventListener('resize', () => {
+          if (presentOverlay.classList.contains('active') && presentSlides[presentIdx]) {
+            try {
+              const tpcEl = mind.findEle(presentSlides[presentIdx].id)
+              if (tpcEl) updateHighlightPosition(tpcEl)
+            } catch (e) {}
+          }
+        })
+      }) // end waitForMind
 
     })
   </script>

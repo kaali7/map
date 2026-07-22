@@ -9,11 +9,11 @@ This document outlines the source code directory structure for the MindElixir pr
 - **`dev.ts` & `dev.dist.ts`**: Scripts used for local development and testing environments.
 - **`arrow.ts`**: Contains logic and rendering calculations for drawing relationship arrows/connections between nodes.
 - **`branchTests.ts`**: Tests and logic for generating different branch layouts and styles (straight, curved, angular).
-- **`const.ts`**: Centralized constants and theme definitions (Light & Dark) configured with transparent node backgrounds (`--main-bgcolor: 'transparent'`), borderless card defaults (`--root-border-color: 'rgba(0,0,0,0)'`, `--main-border: 'none'`), and canvas-matching root background (`--root-bgcolor: '#f8fafc'` in Light, `'#121212'` in Dark).
+- **`const.ts`**: Centralized constants and theme definitions (Light & Dark) configured with uniform bordered node designs (`--main-bgcolor: '#ffffff'`, `--main-border: '1.5px solid'`), and canvas-matching root background.
 - **`docs.ts`**: Used for documentation generation or examples.
 - **`i18n.ts`**: Internationalization module handling multiple languages for UI elements.
 - **`interact.ts`**: Handles user interactions like node dragging, double-clicking, and canvas view centering (`toCenter` offset calculations relative to `me-nodes`).
-- **`linkDiv.ts`**: Manages the SVG lines and DOM layers that connect topics.
+- **`linkDiv.ts`**: Manages the SVG lines and DOM layers that connect topics, precisely calculating sub-branch curves from text box boundaries (`me-tpc`).
 - **`methods.ts`**: Contains core prototype methods attached to the MindElixir instance (like zoom up to 500% scaleMax, center view, getting data).
 - **`mouse.ts`**: Specifically handles mouse events like panning the canvas, zooming via scroll, and selection.
 - **`nodeOperation.ts`**: Contains all CRUD operations for nodes (add, remove, move, edit text).
@@ -53,14 +53,25 @@ TypeScript type definitions.
 Helper functions and internal utilities.
 - **`dom.ts` & `domManipulation.ts`**: DOM creation and manipulation helpers (`shapeTpc` sets `data-media-type` and `data-media-pos` on `me-tpc` for node image/icon position control).
 - **`layout.ts` & `layout-ssr.ts`**: The core layout engine that calculates node positions (Left, Right, Balanced).
-- **`generateBranch.ts`**: Helpers for drawing SVG paths for main and sub branches. `main()` draws root-to-main bezier curves while `sub()` computes smooth cubic Bezier S-curves (`M x1 y1 C xControl y1 xControl y2 x2 y2`) connecting parent center to child center.
+- **`generateBranch.ts`**: Helpers for drawing SVG paths for main and sub branches. Both `main()` and `sub()` compute smooth cubic Bezier S-curves (`M x1 y1 C xControl y1 xControl y2 x2 y2`) connecting parent edge to child edge.
 - **`panHelper.ts` & `LinkPanHelper.ts`**: Utilities for canvas panning physics.
 - **`plaintextConverter.ts` / `plaintextToMindElixir.ts` / `mindElixirToPlaintext.ts`**: Parsers that convert between plain text outlines and structured mind map JSON.
 - **`pubsub.ts`**: An event emitter used internally for decoupled communication.
 - **`svg.ts`**: SVG generation helpers.
 - **`theme.ts`**: Default theme color palettes (Light & Dark) and CSS variable logic.
 
+### `index.html` (Application Demo & Presentation Feature)
+The main demo page containing complete UI layout and features:
+- **Presentation Mode (`#btn-present`)**:
+  - Fullscreen slide-by-slide traversal of mind map nodes in hierarchical order.
+  - **Dynamic Zoom & Centering (`zoomToNode`)**: Computes unscaled map-local node coordinates `(nodeLocalX, nodeLocalY)` to calculate exact `translate3d(x, y, 0)` offsets for precise viewport centering at depth-based scale levels (Root `1.8x`, Main Branch `2.5x`, Child Nodes `3.2x`).
+  - **Focus Blur Effect**: Blurs non-focused nodes (`filter: blur(1.5px); opacity: 0.25`) while keeping the active slide node sharp (`.present-focus`).
+  - **Theme Adaptive UI**: Presentation top bar, exit button, and bottom navigation pill automatically adapt between Light Mode (white glassmorphism) and Dark Mode (slate glassmorphism).
+  - **Numbered Nav Dots**: The active blue/purple dot expands into a pill displaying the current slide number.
+  - **UI Isolation**: Automatically hides header, toolbars, and help buttons (`body.is-presenting`) during presentation mode and restores map centering on exit.
+
 ### `viselect/`
 An embedded version of a selection library (used for marquee selection).
 - Contains its own `src/` and `utils/` for DOM rectangle intersections, events, and styling.
+
 
