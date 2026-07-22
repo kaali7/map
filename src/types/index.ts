@@ -261,6 +261,7 @@ export interface NodeObj<M = unknown> {
     height: number
     fit?: 'fill' | 'contain' | 'cover'
   }
+  mediaPos?: 'left' | 'top' | 'right' | 'bottom'
   /**
    * The color of the branch.
    */

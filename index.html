@@ -39,11 +39,14 @@
     .header-left {
       display: flex;
       align-items: center;
-      gap: 2px;
-      background: #ffffff;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-radius: 14px;
-      padding: 6px 10px 6px 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
+      padding: 5px 10px 5px 8px;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       height: 100%;
     }
 
@@ -109,28 +112,33 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-radius: 14px;
-      padding: 6px 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
+      padding: 5px 8px;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       height: 100%;
     }
 
     .btn-share {
       display: flex; align-items: center; gap: 6px;
       padding: 7px 16px;
-      background: #2563eb;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: white;
       border: none;
-      border-radius: 9px;
+      border-radius: 10px;
       font-size: 13px;
       font-weight: 600;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
       white-space: nowrap;
     }
-    .btn-share:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-share:hover { box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4); transform: translateY(-1px); }
+    .btn-share:active { transform: translateY(0) scale(0.96); }
     .btn-share svg { width: 14px; height: 14px; }
 
     .avatar {
@@ -159,49 +167,51 @@
     }
 
     /* ═══════════════════════════════════════
-       RIGHT FLOATING TOOLBAR
+       TOP TOOLBAR (Moved from right)
     ═══════════════════════════════════════ */
     #right-toolbar {
-      position: fixed;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 999;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 6px;
+      margin-left: 12px;
+      align-items: center;
     }
 
     .rt-group {
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-radius: 14px;
-      padding: 6px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
+      padding: 5px;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 2px;
+      height: 100%;
     }
 
     .rt-btn {
-      width: 36px; height: 36px;
-      border-radius: 10px;
+      width: 34px; height: 34px;
+      border-radius: 9px;
       border: none;
       background: transparent;
-      color: #6b7280;
+      color: #475569;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, color 0.15s;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
-    .rt-btn:hover { background: #f3f4f6; color: #111827; }
-    .rt-btn svg { width: 18px; height: 18px; }
+    .rt-btn:hover { background: #f1f5f9; color: #0f172a; transform: translateY(-1px); }
+    .rt-btn:active { transform: translateY(0) scale(0.95); }
+    .rt-btn svg { width: 16px; height: 16px; }
 
     .rt-btn[data-tooltip]::after {
       content: attr(data-tooltip);
       position: absolute;
-      right: 46px;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 42px;
+      left: 50%;
+      transform: translateX(-50%);
       background: #111827;
       color: white;
       font-size: 11px;
@@ -212,58 +222,122 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.15s;
+      z-index: 10000;
     }
     .rt-btn:hover[data-tooltip]::after { opacity: 1; }
+
+    /* ═══════════════════════════════════════
+       MORE OPTIONS POPOVER
+    ═══════════════════════════════════════ */
+    .more-options-btn {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #6b7280;
+      transition: background 0.15s, color 0.15s;
+      margin-left: 2px;
+    }
+    .more-options-btn:hover { background: #f3f4f6; color: #111827; }
+    .more-options-btn svg { width: 16px; height: 16px; }
+
+    #more-options-popover {
+      position: absolute;
+      top: 50px;
+      left: 12px;
+      background: white;
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.06);
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 2000;
+      min-width: 180px;
+    }
+    #more-options-popover.visible { display: flex; }
+    
+    .mo-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      transition: background 0.15s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .mo-btn:hover { background: #f3f4f6; }
+    .mo-btn svg { width: 16px; height: 16px; color: #6b7280; }
+    
+    .mo-divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 4px 0;
+    }
 
     /* ═══════════════════════════════════════
        DARK MODE STYLES
     ═══════════════════════════════════════ */
     body.dark-mode {
-      background: #111827;
+      background: #121212;
     }
     .dark-mode .header-left, .dark-mode .header-right, .dark-mode .rt-group, .dark-mode .bl-group, .dark-mode .help-btn, .dark-mode #title-popover, .dark-mode #shortcuts-panel {
-      background: #1f2937;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
-      color: #f3f4f6;
+      background: #212529;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+      color: #f8f9fa;
     }
     .dark-mode #map-title-display, .dark-mode #title-popover label {
-      color: #f3f4f6;
+      color: #f8f9fa;
     }
     .dark-mode .title-area:hover, .dark-mode .header-icon-btn:hover, .dark-mode .rt-btn:hover, .dark-mode .bl-btn:hover, .dark-mode .help-btn:hover {
-      background: #374151;
-      color: #f9fafb;
+      background: #343a40;
+      color: #ffffff;
     }
     .dark-mode .header-icon-btn, .dark-mode .rt-btn, .dark-mode .bl-btn, .dark-mode .help-btn, .dark-mode .chevron-icon {
-      color: #9ca3af;
+      color: #adb5bd;
     }
     .dark-mode #map {
-      background: #111827;
+      background: #121212;
     }
     .dark-mode .zoom-display, .dark-mode #shortcuts-panel h3, .dark-mode .sc-desc {
-      color: #d1d5db;
+      color: #ced4da;
     }
     .dark-mode .zoom-divider, .dark-mode .sc-row {
-      background: #374151;
-      border-color: #374151;
+      background: #343a40;
+      border-color: #343a40;
     }
     .dark-mode .sc-key {
-      background: #374151;
-      border-color: #4b5563;
-      color: #d1d5db;
+      background: #343a40;
+      border-color: #495057;
+      color: #ced4da;
     }
     .dark-mode #title-edit-input {
-      background: #111827;
-      color: #f3f4f6;
-      border-color: #4b5563;
+      background: #121212;
+      color: #f8f9fa;
+      border-color: #495057;
     }
     .dark-mode .bl-btn.active {
       background: #3730a3;
       color: #a5b4fc;
     }
     .dark-mode #toast {
-      background: #ffffff;
-      color: #111827;
+      background: #f8f9fa;
+      color: #121212;
     }
+
+    .dark-mode #more-options-popover { background: #212529; box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05); }
+    .dark-mode .mo-btn { color: #ced4da; }
+    .dark-mode .mo-btn:hover { background: #343a40; }
+    .dark-mode .mo-divider { background: #343a40; }
+    .dark-mode .more-options-btn { color: #adb5bd; }
+    .dark-mode .more-options-btn:hover { background: #343a40; color: #ffffff; }
 
     /* ═══════════════════════════════════════
        BOTTOM LEFT CONTROLS
@@ -494,19 +568,22 @@
     #node-toolbar {
       position: fixed;
       z-index: 5000;
-      background: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.07);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px) saturate(190%);
+      -webkit-backdrop-filter: blur(20px) saturate(190%);
+      border-radius: 16px;
+      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       padding: 8px;
-      width: 220px;
+      width: 235px;
       pointer-events: all;
-      transition: opacity 0.15s, transform 0.15s;
+      transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
       transform-origin: bottom center;
     }
     #node-toolbar.hidden {
       opacity: 0;
       pointer-events: none;
-      transform: scale(0.95) translateY(4px);
+      transform: scale(0.94) translateY(6px);
     }
 
     /* Arrow tip pointing down to node */
@@ -574,16 +651,21 @@
     .ntb-swatch:hover { transform: scale(1.2); }
     .ntb-swatch.active { border-color: #111827; }
 
-    /* Color input */
-    .ntb-color-input {
-      width: 100%;
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
+    /* Custom Color Pickers */
+    .ntb-custom-color-row { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+    .ntb-custom-picker-btn {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid #e5e7eb;
+      background: #f9fafb;
       cursor: pointer;
-      padding: 2px;
-      margin-top: 6px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
     }
+    .ntb-custom-picker-btn:hover { border-color: #7c3aed; }
+    .ntb-custom-picker-btn svg { width: 10px; height: 10px; color: #4b5563; pointer-events: none; }
+    .ntb-color-input-hidden { opacity: 0; position: absolute; left: 0; top: 0; width: 100%; height: 100%; cursor: pointer; }
+    .ntb-recent-swatches { display: flex; gap: 6px; }
 
     /* Shape buttons */
     .ntb-shape-row { display: flex; gap: 6px; }
@@ -640,6 +722,36 @@
     }
     .ntb-size-btn.active { border-color: #7c3aed; background: #ede9fe; }
 
+    /* Sub-tabs */
+    .ntb-subtabs {
+      display: flex;
+      background: #f8fafc;
+      padding: 4px;
+      gap: 4px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .ntb-subtab {
+      flex: 1;
+      padding: 6px 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .ntb-subtab:hover {
+      color: #0f172a;
+      background: rgba(0,0,0,0.04);
+    }
+    .ntb-subtab.active {
+      color: #7c3aed;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
     /* Image/Link inputs */
     .ntb-input-row { display: flex; gap: 6px; }
     .ntb-text-input {
@@ -654,27 +766,29 @@
     }
     .ntb-text-input:focus { border-color: #7c3aed; }
     .ntb-apply-btn {
-      padding: 6px 12px;
-      background: #7c3aed;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
+      background: #7c3aed; color: #fff;
+      border: none; border-radius: 8px;
+      padding: 0 12px; font-size: 12px;
+      font-weight: 600; cursor: pointer;
+      transition: background 0.1s;
     }
     .ntb-apply-btn:hover { background: #6d28d9; }
+    
+    .ntb-upload-btn:hover { background: #f9fafb; border-color: #7c3aed; color: #7c3aed; }
     .ntb-danger-btn {
-      width: 100%;
-      padding: 6px;
-      border-radius: 8px;
-      border: 1.5px solid #fca5a5;
-      background: #fef2f2;
-      color: #dc2626;
-      font-size: 12px;
-      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #ef4444;
+      font-size: 11px;
+      font-weight: 500;
       cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ntb-danger-btn:hover {
+      background: #fef2f2;
+      border-color: #fca5a5;
     }
 
     /* Emoji grid */
@@ -741,23 +855,133 @@
     }
     .ntb-search-input:focus { border-color: #7c3aed; background: #ffffff; }
 
-    /* Dark mode */
-    .dark-mode #node-toolbar { background: #1f2937; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08); }
-    .dark-mode #node-toolbar::after { border-top-color: #1f2937; }
-    .dark-mode .ntb-tab { color: #9ca3af; }
-    .dark-mode .ntb-tab:hover { background: #374151; color: #f9fafb; }
-    .dark-mode .ntb-tab.active { background: #3730a3; color: #a5b4fc; }
-    .dark-mode .ntb-label { color: #6b7280; }
-    .dark-mode .ntb-text-input { background: #111827; border-color: #4b5563; color: #f3f4f6; }
-    .dark-mode .ntb-shape-btn, .dark-mode .ntb-font-btn, .dark-mode .ntb-size-btn, .dark-mode .ntb-ff-btn {
-      background: #111827; border-color: #374151; color: #d1d5db;
+    /* ═══════════════════════════════════════
+       MEDIA & ICON POSITIONING IN ME-TPC
+    ═══════════════════════════════════════ */
+    me-tpc[data-media-type="image"][data-media-pos="top"] {
+      display: inline-flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 4px !important;
     }
-    .dark-mode .ntb-subtabs { border-color: #374151; }
-    .dark-mode .ntb-subtab { color: #9ca3af; }
-    .dark-mode .ntb-subtab:hover { color: #f9fafb; }
+    me-tpc[data-media-type="image"][data-media-pos="bottom"] {
+      display: inline-flex !important;
+      flex-direction: column-reverse !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+    me-tpc[data-media-type="image"][data-media-pos="left"] {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+    me-tpc[data-media-type="image"][data-media-pos="right"] {
+      display: inline-flex !important;
+      flex-direction: row-reverse !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    me-tpc[data-media-type="icon"][data-media-pos="left"] {
+      display: inline-flex !important;
+      flex-direction: row-reverse !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+    me-tpc[data-media-type="icon"][data-media-pos="right"] {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+    me-tpc[data-media-type="icon"][data-media-pos="top"] {
+      display: inline-flex !important;
+      flex-direction: column-reverse !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+    me-tpc[data-media-type="icon"][data-media-pos="bottom"] {
+      display: inline-flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+
+    me-tpc[data-media-type] > img {
+      margin-bottom: 0 !important;
+    }
+
+    .ntb-pos-selector {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      background: #ffffff;
+    }
+    .ntb-pos-btn {
+      width: 28px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .ntb-pos-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .ntb-pos-btn.active {
+      background: #f3e8ff;
+      border-color: #c084fc;
+      color: #7c3aed;
+      box-shadow: 0 1px 2px rgba(124, 58, 237, 0.1);
+    }
+    .ntb-pos-btn.ntb-pos-remove:hover {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+    .dark-mode .ntb-pos-selector { border-bottom-color: #2b3036; background: #1a1d20; }
+    .dark-mode .ntb-pos-btn { color: #94a3b8; }
+    .dark-mode .ntb-pos-btn:hover { background: #2b3036; color: #f8fafc; }
+    .dark-mode .ntb-pos-btn.active { background: #3b0764; border-color: #a855f7; color: #c084fc; }
+
+    /* Dark mode */
+    .dark-mode .header-left, .dark-mode .header-right, .dark-mode .rt-group, .dark-mode .bl-group, .dark-mode .help-btn, .dark-mode #title-popover, .dark-mode #shortcuts-panel, .dark-mode #more-options-popover, .dark-mode #node-toolbar, .dark-mode #layout-popover {
+      background: rgba(33, 37, 41, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      color: #f8fafc;
+    }
+    .dark-mode #node-toolbar::after { border-top-color: #212529; }
+    .dark-mode .ntb-tab { color: #adb5bd; }
+    .dark-mode .ntb-tab:hover { background: #343a40; color: #f8f9fa; }
+    .dark-mode .ntb-tab.active { background: #3730a3; color: #a5b4fc; }
+    .dark-mode .ntb-label { color: #adb5bd; }
+    .dark-mode .ntb-text-input { background: #121212; border-color: #495057; color: #f8f9fa; }
+    .dark-mode .ntb-shape-btn, .dark-mode .ntb-font-btn, .dark-mode .ntb-size-btn, .dark-mode .ntb-ff-btn {
+      background: #121212; border-color: #343a40; color: #ced4da;
+    }
+    .dark-mode .ntb-custom-picker-btn { background: #121212; border-color: #343a40; }
+    .dark-mode .ntb-custom-picker-btn svg { color: #ced4da; }
+    .dark-mode .ntb-subtabs { border-color: #343a40; }
+    .dark-mode .ntb-subtab { color: #adb5bd; }
+    .dark-mode .ntb-subtab:hover { color: #f8f9fa; }
     .dark-mode .ntb-subtab.active { color: #a5b4fc; border-bottom-color: #a5b4fc; }
-    .dark-mode .ntb-search-input { background: #1f2937; border-color: #4b5563; color: #f3f4f6; }
-    .dark-mode .ntb-search-input:focus { background: #111827; }
+    .dark-mode .ntb-search-input { background: #212529; border-color: #495057; color: #f8f9fa; }
+    .dark-mode .ntb-search-input:focus { background: #121212; }
 
     /* ═══════════════════════════════════════
        FILE INPUT (hidden)
@@ -779,6 +1003,67 @@
         <svg class="chevron-icon" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/>
         </svg>
+      </div>
+
+      <div class="more-options-btn" id="more-options-toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1"></circle>
+          <circle cx="12" cy="5" r="1"></circle>
+          <circle cx="12" cy="19" r="1"></circle>
+        </svg>
+      </div>
+    </div>
+    
+    <div id="more-options-popover">
+      <button class="mo-btn" id="rt-new">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        New Map
+      </button>
+      <button class="mo-btn" id="rt-palette">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>
+        Theme Colors
+      </button>
+      <button class="mo-btn" id="rt-darkmode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        Dark Mode
+      </button>
+      <div class="mo-divider"></div>
+      <button class="mo-btn" id="rt-export">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export JSON
+      </button>
+      <button class="mo-btn" id="rt-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Import JSON
+      </button>
+    </div>
+
+    <div id="right-toolbar">
+      <div class="rt-group">
+        <button class="rt-btn" id="rt-center" data-tooltip="Center View">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M3 12h3M18 12h3M12 3v3M12 18v3"/>
+          </svg>
+        </button>
+        <button class="rt-btn" id="rt-search" data-tooltip="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="rt-group">
+        <button class="rt-btn" id="rt-undo" data-tooltip="Undo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/>
+          </svg>
+        </button>
+        <button class="rt-btn" id="rt-redo" data-tooltip="Redo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 014-4h12"/>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -821,79 +1106,11 @@
   <!-- ══ MIND MAP CANVAS ══ -->
   <div id="map"></div>
 
-  <!-- ══ RIGHT FLOATING TOOLBAR ══ -->
-  <div id="right-toolbar">
-    <div class="rt-group">
-      <button class="rt-btn" id="rt-new" data-tooltip="New Map">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
-      </button>
-      <button class="rt-btn" id="rt-center" data-tooltip="Center View">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M3 12h3M18 12h3M12 3v3M12 18v3"/>
-        </svg>
-      </button>
-      <button class="rt-btn" id="rt-palette" data-tooltip="Theme Colors">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="13.5" cy="6.5" r="2.5"/>
-          <circle cx="6.5" cy="10.5" r="2.5"/>
-          <circle cx="17.5" cy="14.5" r="2.5"/>
-          <circle cx="10.5" cy="17.5" r="2.5"/>
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/>
-        </svg>
-      </button>
-      <button class="rt-btn" id="rt-darkmode" data-tooltip="Dark Mode">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-      <button class="rt-btn" id="rt-search" data-tooltip="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-      </button>
-    </div>
 
-    <div class="rt-group">
-      <button class="rt-btn" id="rt-export" data-tooltip="Export JSON">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-      </button>
-      <button class="rt-btn" id="rt-import" data-tooltip="Import JSON">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-      </button>
-    </div>
-
-    <div class="rt-group">
-      <button class="rt-btn" id="rt-undo" data-tooltip="Undo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/>
-        </svg>
-      </button>
-      <button class="rt-btn" id="rt-redo" data-tooltip="Redo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 014-4h12"/>
-        </svg>
-      </button>
-    </div>
-  </div>
 
   <!-- ══ BOTTOM LEFT CONTROLS ══ -->
   <div id="bottom-left">
     <div class="bl-group">
-      <button class="bl-btn" id="bl-page" title="Pages">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
-      </button>
       <button class="bl-btn active" id="bl-layout-icon" title="Layout Options">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -922,9 +1139,7 @@
           Left Aligned
         </div>
       </div>
-    </div>
 
-    <div class="bl-group">
       <button class="bl-btn" id="bl-zoom-out" title="Zoom out">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -990,6 +1205,9 @@
       <button class="ntb-tab"        data-tab="branch"  title="Branch Color">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M18 9a9 9 0 0 0-9 9"/></svg>
       </button>
+      <button class="ntb-tab"        data-tab="connect" title="Connection">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h3c2 0 4-1 4-3V6c0-2 2-3 4-3h3"/><polyline points="15 7 19 3 15 -1"/></svg>
+      </button>
     </div>
 
     <!-- Panel: Shape -->
@@ -997,7 +1215,13 @@
       <p class="ntb-label">Theme Colors</p>
       <div class="ntb-swatch-row" id="ntb-shape-swatches"></div>
       <p class="ntb-label" style="margin-top:10px">Custom</p>
-      <input type="color" id="ntb-custom-color" class="ntb-color-input" />
+      <div class="ntb-custom-color-row">
+        <label class="ntb-custom-picker-btn" title="Pick custom color">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          <input type="color" id="ntb-custom-color" class="ntb-color-input-hidden" />
+        </label>
+        <div id="ntb-shape-recent" class="ntb-recent-swatches"></div>
+      </div>
       <p class="ntb-label" style="margin-top:10px">Shape</p>
       <div class="ntb-shape-row">
         <button class="ntb-shape-btn"        data-shape="none"    title="No Shape">
@@ -1043,7 +1267,13 @@
       </div>
       <p class="ntb-label" style="margin-top:10px">Text Color</p>
       <div class="ntb-swatch-row" id="ntb-text-swatches"></div>
-      <input type="color" id="ntb-text-custom-color" class="ntb-color-input" style="margin-top:6px" />
+      <div class="ntb-custom-color-row">
+        <label class="ntb-custom-picker-btn" title="Pick custom color">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          <input type="color" id="ntb-text-custom-color" class="ntb-color-input-hidden" />
+        </label>
+        <div id="ntb-text-recent" class="ntb-recent-swatches"></div>
+      </div>
     </div>
 
     <!-- Panel: Image/Icon/Emoji -->
@@ -1054,13 +1284,50 @@
         <button class="ntb-subtab" data-sub="emoji">Emoji</button>
       </div>
 
+      <!-- Position Selector Row -->
+      <div class="ntb-pos-selector">
+        <span class="ntb-pos-label" style="font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px;">POS:</span>
+        <div style="display: flex; gap: 4px;">
+          <button class="ntb-pos-btn" data-pos="left" title="Left of text">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="8" r="2.5" fill="currentColor"/><line x1="9" y1="8" x2="15" y2="8" stroke-linecap="round"/></svg>
+          </button>
+          <button class="ntb-pos-btn" data-pos="bottom" title="Bottom of text">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="13" y2="5" stroke-linecap="round"/><circle cx="8" cy="11" r="2.5" fill="currentColor"/></svg>
+          </button>
+          <button class="ntb-pos-btn" data-pos="right" title="Right of text">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="1" y1="8" x2="7" y2="8" stroke-linecap="round"/><circle cx="12" cy="8" r="2.5" fill="currentColor"/></svg>
+          </button>
+          <button class="ntb-pos-btn" data-pos="top" title="Top of text">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5" fill="currentColor"/><line x1="3" y1="11" x2="13" y2="11" stroke-linecap="round"/></svg>
+          </button>
+          <button class="ntb-pos-btn ntb-pos-remove" data-pos="none" title="Remove Media" style="color: #ef4444;">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><line x1="3.76" y1="3.76" x2="12.24" y2="12.24"/></svg>
+          </button>
+        </div>
+      </div>
+
       <!-- Sub-panel: Image -->
       <div class="ntb-subpanel" id="ntb-sub-media">
         <div style="padding: 12px 8px;">
-          <p class="ntb-label">Image URL</p>
-          <div class="ntb-input-row">
-            <input type="text" id="ntb-img-url" placeholder="https://..." class="ntb-text-input" />
-            <button id="ntb-img-apply" class="ntb-apply-btn">Apply</button>
+          <select id="ntb-img-type-select" class="ntb-text-input" style="width: 100%; margin-bottom: 12px; cursor: pointer; padding: 6px;">
+            <option value="url">IMAGE URL</option>
+            <option value="upload">UPLOAD IMAGE</option>
+          </select>
+          
+          <div id="ntb-img-url-section">
+            <input type="text" id="ntb-img-url" placeholder="https://..." class="ntb-text-input" style="width: 100%; box-sizing: border-box; margin-bottom: 6px;" />
+            <div style="display: flex; justify-content: flex-end;">
+              <button id="ntb-img-apply" class="ntb-apply-btn" style="padding: 4px 12px; font-size: 11px; height: 26px;">Apply</button>
+            </div>
+          </div>
+          
+          <div id="ntb-img-upload-section" style="display: none;">
+            <div class="ntb-input-row">
+              <input type="file" id="ntb-img-upload" accept="image/*" style="display: none;" />
+              <label for="ntb-img-upload" class="ntb-upload-btn" style="flex: 1; text-align: center; cursor: pointer; padding: 6px; border-radius: 8px; border: 1.5px dashed #d1d5db; color: #6b7280; font-size: 13px; font-weight: 500; transition: all 0.2s;">
+                Click to Upload
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -1093,18 +1360,35 @@
     <!-- Panel: Link -->
     <div class="ntb-panel hidden" id="ntb-panel-link">
       <p class="ntb-label">Hyperlink URL</p>
-      <div class="ntb-input-row">
-        <input type="text" id="ntb-link-url" placeholder="https://..." class="ntb-text-input" />
-        <button id="ntb-link-apply" class="ntb-apply-btn">Set</button>
+      <input type="text" id="ntb-link-url" placeholder="https://..." class="ntb-text-input" style="width: 100%; box-sizing: border-box; margin-bottom: 6px;" />
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+        <button id="ntb-link-remove" class="ntb-danger-btn">Remove</button>
+        <button id="ntb-link-apply" class="ntb-apply-btn" style="padding: 4px 12px; font-size: 11px; height: 26px;">Set</button>
       </div>
-      <button id="ntb-link-remove" class="ntb-danger-btn" style="margin-top:6px">Remove Link</button>
     </div>
 
     <!-- Panel: Branch Color -->
     <div class="ntb-panel hidden" id="ntb-panel-branch">
       <p class="ntb-label">Branch Line Color</p>
       <div class="ntb-swatch-row" id="ntb-branch-swatches"></div>
-      <input type="color" id="ntb-branch-custom" class="ntb-color-input" style="margin-top:6px" />
+      <p class="ntb-label" style="margin-top:10px">Custom</p>
+      <div class="ntb-custom-color-row">
+        <label class="ntb-custom-picker-btn" title="Pick custom color">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          <input type="color" id="ntb-branch-custom" class="ntb-color-input-hidden" />
+        </label>
+        <div id="ntb-branch-recent" class="ntb-recent-swatches"></div>
+      </div>
+    </div>
+
+    <!-- Panel: Connection -->
+    <div class="ntb-panel hidden" id="ntb-panel-connect">
+      <p class="ntb-label">Draw Relationship</p>
+      <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <button id="ntb-connect-uni" class="ntb-apply-btn" style="flex:1; padding: 6px 0; height: auto;">One-way</button>
+        <button id="ntb-connect-bi" class="ntb-apply-btn" style="flex:1; padding: 6px 0; height: auto;">Two-way</button>
+      </div>
+      <p style="font-size: 11px; color: #6b7280; margin-top: 8px; text-align: center;">Click a button, then click a target node.</p>
     </div>
 
   </div>
@@ -1118,6 +1402,17 @@
   <script type="module" src="/src/dev.ts"></script>
 
   <script>
+    /* ── More Options Toggle ── */
+    document.getElementById('more-options-toggle').addEventListener('click', (e) => {
+      e.stopPropagation()
+      document.getElementById('more-options-popover').classList.toggle('visible')
+    })
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#more-options-popover') && !e.target.closest('#more-options-toggle')) {
+        document.getElementById('more-options-popover').classList.remove('visible')
+      }
+    })
+
     /* ── helpers ── */
     function toast(msg, color = '#111827') {
       const t = document.getElementById('toast')
@@ -1305,14 +1600,14 @@
             ...mind.theme,
             cssVar: {
               ...mind.theme.cssVar,
-              '--main-color': '#f9fafb',
-              '--main-bgcolor': '#1f2937',
-              '--color': '#d1d5db',
-              '--bgcolor': '#111827',
+              '--main-color': '#f8f9fa',
+              '--main-bgcolor': '#212529',
+              '--color': '#ced4da',
+              '--bgcolor': '#121212',
               '--panel-color': '255, 255, 255',
-              '--panel-bgcolor': '31, 41, 55',
-              '--selected': '#374151',
-              '--root-color': '#f9fafb'
+              '--panel-bgcolor': '33, 37, 41',
+              '--selected': '#343a40',
+              '--root-color': '#f8f9fa'
             }
           });
           toast('🌙 Dark mode enabled');
@@ -1408,6 +1703,15 @@
             b.classList.toggle('active', isActive)
           }
         })
+        syncPosSelectorUI()
+      }
+
+      function syncPosSelectorUI() {
+        if (!currentNodeObj) return
+        const currentPos = currentNodeObj.mediaPos || (currentNodeObj.image ? 'top' : currentNodeObj.icons ? 'right' : '')
+        document.querySelectorAll('.ntb-pos-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.pos === currentPos)
+        })
       }
 
       /* ── Build colour swatches ── */
@@ -1491,16 +1795,59 @@
 
       function applyEmoji(emoji) {
         if (!currentNodeTopic || !currentNodeObj) return
-        const existing = currentNodeObj.icons || []
-        currentNodeObj.icons = [emoji, ...existing.filter(i => i !== emoji)].slice(0, 3)
+        delete currentNodeObj.image // Enforce ONLY ONE thing: clear image
+        currentNodeObj.icons = [emoji] // Only 1 icon/emoji
+        if (!currentNodeObj.mediaPos) currentNodeObj.mediaPos = 'right'
         mind.refresh(mind.getData())
-        toast('Icon added: ' + emoji)
+        syncToolbarState()
+        toast('Added: ' + emoji)
+      }
+
+      /* ── Recent Custom Colors ── */
+      let recentColors = []
+
+      function updateRecentColors() {
+        ['ntb-shape-recent', 'ntb-text-recent', 'ntb-branch-recent'].forEach((id, idx) => {
+          const el = document.getElementById(id)
+          if(!el) return
+          el.innerHTML = ''
+          recentColors.forEach(color => {
+            const sw = document.createElement('button')
+            sw.className = 'ntb-swatch'
+            sw.style.background = color
+            sw.style.border = color === '#ffffff' ? '1.5px solid #e5e7eb' : '2px solid transparent'
+            sw.addEventListener('click', () => {
+              if (idx === 0) applyBgColor(color)
+              else if (idx === 1) applyTextColor(color)
+              else if (idx === 2) applyBranchColor(color)
+            })
+            el.appendChild(sw)
+          })
+        })
+      }
+
+      function addRecentColor(color) {
+        if (recentColors.includes(color)) {
+          recentColors = recentColors.filter(c => c !== color)
+        }
+        recentColors.unshift(color)
+        if (recentColors.length > 5) recentColors.pop()
+        updateRecentColors()
       }
 
       /* ── Custom color inputs ── */
-      document.getElementById('ntb-custom-color').addEventListener('input', (e) => applyBgColor(e.target.value))
-      document.getElementById('ntb-text-custom-color').addEventListener('input', (e) => applyTextColor(e.target.value))
-      document.getElementById('ntb-branch-custom').addEventListener('input', (e) => applyBranchColor(e.target.value))
+      document.getElementById('ntb-custom-color').addEventListener('input', (e) => {
+        applyBgColor(e.target.value)
+        addRecentColor(e.target.value)
+      })
+      document.getElementById('ntb-text-custom-color').addEventListener('input', (e) => {
+        applyTextColor(e.target.value)
+        addRecentColor(e.target.value)
+      })
+      document.getElementById('ntb-branch-custom').addEventListener('input', (e) => {
+        applyBranchColor(e.target.value)
+        addRecentColor(e.target.value)
+      })
 
       /* ── Font Family ── */
       document.querySelectorAll('.ntb-ff-btn').forEach(btn => {
@@ -1558,13 +1905,72 @@
         })
       })
 
-      /* ── Image URL ── */
+      /* ── Image URL & Upload ── */
+      document.getElementById('ntb-img-type-select').addEventListener('change', (e) => {
+        if (e.target.value === 'url') {
+          document.getElementById('ntb-img-url-section').style.display = 'block'
+          document.getElementById('ntb-img-upload-section').style.display = 'none'
+        } else {
+          document.getElementById('ntb-img-url-section').style.display = 'none'
+          document.getElementById('ntb-img-upload-section').style.display = 'block'
+        }
+      })
+
       document.getElementById('ntb-img-apply').addEventListener('click', () => {
         const url = document.getElementById('ntb-img-url').value.trim()
         if (!url || !currentNodeObj) return
+        delete currentNodeObj.icons // Enforce ONLY ONE thing: clear icons/emojis
         currentNodeObj.image = { url, width: 100, height: 60, fit: 'contain' }
+        if (!currentNodeObj.mediaPos) currentNodeObj.mediaPos = 'top'
         mind.refresh(mind.getData())
+        syncToolbarState()
         toast('Image applied')
+      })
+
+      document.getElementById('ntb-img-upload').addEventListener('change', (e) => {
+        const file = e.target.files[0]
+        if (!file || !currentNodeObj) return
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          const base64Url = event.target.result
+          const img = new Image()
+          img.onload = () => {
+            let w = img.width
+            let h = img.height
+            if (w > 200) {
+              h = (200 / w) * h
+              w = 200
+            }
+            delete currentNodeObj.icons // Enforce ONLY ONE thing: clear icons/emojis
+            currentNodeObj.image = { url: base64Url, width: w, height: h, fit: 'contain' }
+            if (!currentNodeObj.mediaPos) currentNodeObj.mediaPos = 'top'
+            mind.refresh(mind.getData())
+            syncToolbarState()
+            toast('Image uploaded')
+            e.target.value = '' // reset
+          }
+          img.src = base64Url
+        }
+        reader.readAsDataURL(file)
+      })
+
+      /* ── Position selector click handler ── */
+      document.querySelectorAll('.ntb-pos-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!currentNodeObj) return
+          const pos = btn.dataset.pos
+          if (pos === 'none') {
+            delete currentNodeObj.image
+            delete currentNodeObj.icons
+            delete currentNodeObj.mediaPos
+            toast('Media removed')
+          } else {
+            currentNodeObj.mediaPos = pos
+            toast('Position set to ' + pos)
+          }
+          mind.refresh(mind.getData())
+          syncToolbarState()
+        })
       })
 
       /* ── Hyperlink ── */
@@ -1581,6 +1987,37 @@
         mind.refresh(mind.getData())
         toast('Link removed')
       })
+
+      /* ── Connect (Arrow) ── */
+      const connectFunc = (options) => {
+        if (!currentNodeTopic) return
+        const from = currentNodeTopic
+        const tips = document.createElement('div')
+        tips.textContent = 'Click target node to connect'
+        tips.style.cssText = 'position:absolute; top:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:8px 16px; border-radius:8px; z-index:9999; pointer-events:none; font-family:sans-serif; font-size:14px;'
+        document.body.appendChild(tips)
+        
+        // Hide toolbar while connecting
+        hideToolbar()
+        
+        const controller = new AbortController()
+        
+        mind.map.addEventListener('click', e => {
+          e.preventDefault()
+          e.stopPropagation()
+          tips.remove()
+          const target = e.target
+          if (target.tagName === 'ME-TPC' && (target.parentElement.tagName === 'ME-PARENT' || target.parentElement.tagName === 'ME-ROOT')) {
+            mind.createArrow(from, target, options)
+          } else {
+            console.log('link cancel')
+          }
+          controller.abort()
+        }, { capture: true, signal: controller.signal })
+      }
+
+      document.getElementById('ntb-connect-uni').addEventListener('click', () => connectFunc())
+      document.getElementById('ntb-connect-bi').addEventListener('click', () => connectFunc({ bidirectional: true }))
 
       /* ── Listen to MindElixir node selection events ── */
       mind.bus.addListener('selectNodes', (nodes) => {

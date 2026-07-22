@@ -29,6 +29,7 @@ export const shapeTpc = function (this: MindElixirInstance, tpc: Topic, nodeObj:
   }
 
   if (nodeObj.image) {
+    tpc.setAttribute('data-media-type', 'image')
     const img = nodeObj.image
     if (img.url && img.width && img.height) {
       const imgEl = document.createElement('img')
@@ -74,6 +75,7 @@ export const shapeTpc = function (this: MindElixirInstance, tpc: Topic, nodeObj:
   }
 
   if (nodeObj.icons && nodeObj.icons.length) {
+    if (!nodeObj.image) tpc.setAttribute('data-media-type', 'icon')
     const iconsEl = document.createElement('span')
     iconsEl.className = 'icons'
     iconsEl.innerHTML = nodeObj.icons.map(icon => `<span>${encodeHTML(icon)}</span>`).join('')
@@ -81,6 +83,16 @@ export const shapeTpc = function (this: MindElixirInstance, tpc: Topic, nodeObj:
     tpc.icons = iconsEl
   } else if (tpc.icons) {
     tpc.icons = undefined
+  }
+
+  if (!nodeObj.image && (!nodeObj.icons || !nodeObj.icons.length)) {
+    tpc.removeAttribute('data-media-type')
+  }
+
+  if (nodeObj.mediaPos) {
+    tpc.setAttribute('data-media-pos', nodeObj.mediaPos)
+  } else {
+    tpc.removeAttribute('data-media-pos')
   }
 
   if (nodeObj.tags && nodeObj.tags.length) {
