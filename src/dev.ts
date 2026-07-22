@@ -3,6 +3,7 @@ import MindElixir from './index'
 import example from './exampleData/1'
 import example2 from './exampleData/2'
 import example3 from './exampleData/3'
+import productLaunch from './exampleData/productLaunch'
 import type { Options, MindElixirInstance, NodeObj } from './types/index'
 import type { Operation } from './utils/pubsub'
 import 'katex/dist/katex.min.css'
@@ -36,7 +37,7 @@ declare let window: Window
 const E = MindElixir.E
 const options: Options = {
   el: '#map',
-  newTopicName: '子节点',
+  newTopicName: 'New Node',
   // mouseSelectionButton: 2,
   editable: true,
   markdown: (text: string, obj: (NodeObj & { useMd?: boolean }) | (Arrow & { useMd?: boolean }) | (Summary & { useMd?: boolean })) => {
@@ -96,7 +97,7 @@ const options: Options = {
       },
     ],
   },
-  toolBar: true,
+  toolBar: false,
   keypress: {
     e(e) {
       if (!mind.currentNode) return
@@ -136,53 +137,21 @@ const options: Options = {
 
 let mind = new MindElixir(options)
 
-const data = MindElixir.new('new topic')
-// example.theme = MindElixir.DARK_THEME
-mind.init(example)
+// Initialize with the Product Launch mind map
+mind.init(productLaunch)
 
+// Branch styles available for switching (not applied by default)
 const branchThemes = {
   markmap: {
     generateMainBranch: markmapMain,
     generateSubBranch: markmapSub,
-    cssVar: {
-      '--root-color': mind.theme.cssVar['--main-color'],
-      '--root-bgcolor': 'transparent',
-      '--root-border-color': 'transparent',
-      '--root-radius': '5px',
-      '--main-radius': '5px',
-      '--main-bgcolor': 'transparent',
-      '--main-border': 'transparent',
-    },
-  },
-  straightUnderline: {
-    generateMainBranch: straightUnderlineMain,
-    generateSubBranch: straightUnderlineSub,
-    cssVar: {
-      '--main-radius': '0',
-      '--main-bgcolor': 'transparent',
-      '--main-border': 'transparent',
-    },
   },
   straight: {
     generateMainBranch: straightMain,
     generateSubBranch: straightSub,
   },
 }
-
-// 动态切换为特定风格，并记录在 meta 中
-mind.changeTheme({
-  ...mind.theme,
-  ...branchThemes.markmap,
-  cssVar: {
-    ...mind.theme.cssVar,
-    ...branchThemes.markmap.cssVar,
-  },
-})
-mind.meta = {
-  ...mind.meta,
-  branchStyle: 'markmap',
-}
-mind.container.dataset.branchStyle = 'markmap'
+// Using default curved branch style to match the light theme design
 
 const m2 = new MindElixir({
   el: '#map2',
