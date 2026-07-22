@@ -1682,6 +1682,18 @@
       pointer-events: none !important;
     }
 
+    /* Automatic Horizontal Landscape Presentation for Portrait Mobile Viewports */
+    body.is-presenting.force-landscape {
+      width: 100vh !important;
+      height: 100vw !important;
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) rotate(90deg) !important;
+      transform-origin: center center !important;
+      overflow: hidden !important;
+    }
+
     /* Presentation Mode: blur & fade out non-focused nodes */
     body.is-presenting me-tpc {
       transition: filter 0.4s ease, opacity 0.4s ease;
@@ -3413,6 +3425,14 @@
           savedScaleVal = mind.scaleVal || 1
 
           document.body.classList.add('is-presenting')
+
+          // Automatically force horizontal landscape presentation on portrait devices
+          if (window.innerWidth < window.innerHeight) {
+            document.body.classList.add('force-landscape')
+          } else {
+            document.body.classList.remove('force-landscape')
+          }
+
           presentOverlay.classList.add('active')
 
           // Fullscreen and Landscape Orientation Lock for mobile phones & tablets
@@ -3438,6 +3458,7 @@
 
         function exitPresentMode() {
           document.body.classList.remove('is-presenting')
+          document.body.classList.remove('force-landscape')
           presentOverlay.classList.remove('active')
           presentHighlight.classList.remove('visible')
           window.removeEventListener('keydown', handlePresentKeydown)
