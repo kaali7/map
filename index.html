@@ -3415,9 +3415,19 @@
           document.body.classList.add('is-presenting')
           presentOverlay.classList.add('active')
 
-          // Fullscreen if supported
+          // Fullscreen and Landscape Orientation Lock for mobile phones & tablets
+          const tryLockOrientation = () => {
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock('landscape').catch(() => {})
+            }
+          }
+
           if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => {})
+            document.documentElement.requestFullscreen()
+              .then(tryLockOrientation)
+              .catch(tryLockOrientation)
+          } else {
+            tryLockOrientation()
           }
 
           buildDots()
@@ -3431,6 +3441,11 @@
           presentOverlay.classList.remove('active')
           presentHighlight.classList.remove('visible')
           window.removeEventListener('keydown', handlePresentKeydown)
+
+          // Unlock screen orientation on exit
+          if (screen.orientation && screen.orientation.unlock) {
+            try { screen.orientation.unlock() } catch (e) {}
+          }
 
           // Remove all present-focus classes to restore normal node appearance
           if (mind.map) {
