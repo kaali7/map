@@ -124,11 +124,11 @@
     margin: 45px 0;
     z-index: 10;
     me-tpc {
-      font-size: 25px;
+      font-size: 18px;
       color: var(--root-color);
-      padding: 10px 30px;
+      padding: 8px 16px;
       border-radius: var(--root-radius);
-      border: var(--root-border-color) 2px solid;
+      border: var(--root-border-color) 1.5px solid;
       background-color: var(--root-bgcolor);
     }
   }
@@ -140,9 +140,11 @@
     z-index: 10;
     me-tpc {
       position: relative;
-      border-radius: 3px;
-      color: var(--color);
-      padding: var(--topic-padding);
+      border-radius: var(--main-radius);
+      color: var(--main-color);
+      background-color: var(--main-bgcolor);
+      border: var(--main-border, none);
+      padding: 6px 12px;
 
       // drag preview
       .insert-preview {

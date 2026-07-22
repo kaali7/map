@@ -46,7 +46,8 @@ export function main({ pT, pL, pW, pH, cT, cL, cW, cH, direction, containerHeigh
   } else {
     x1 = x1 + pW / 10 + offset
   }
-  return `M ${x1} ${y1} Q ${x1} ${y2} ${x2} ${y2}`
+  const xControl = x1 + (x2 - x1) / 2
+  return `M ${x1} ${y1} C ${xControl} ${y1} ${xControl} ${y2} ${x2} ${y2}`
 }
 
 export function sub(this: MindElixirInstance, { pT, pL, pW, pH, cT, cL, cW, cH, direction }: SubLineParams) {

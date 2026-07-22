@@ -1,6 +1,6 @@
 import { createPath, createLinkSvg } from './utils/svg'
 import { getOffsetLT } from './utils/index'
-import type { Wrapper, Topic } from './types/dom'
+import type { Wrapper, Topic, Parent, Expander } from './types/dom'
 import type { DirectionClass, MindElixirInstance } from './types/index'
 
 /**
@@ -71,27 +71,29 @@ const traverseChildren = function (
   direction: DirectionClass,
   isFirst?: boolean
 ) {
-  const parent = wrapper.firstChild
+  const parent = wrapper.firstChild as Parent
   const children = wrapper.children[1].children
   if (children.length === 0) return
 
-  const pT = parent.offsetTop
-  const pL = parent.offsetLeft
-  const pW = parent.offsetWidth
-  const pH = parent.offsetHeight
+  const parentTpc = parent.querySelector('me-tpc') as Topic
+  const pT = parent.offsetTop + parentTpc.offsetTop
+  const pL = parent.offsetLeft + parentTpc.offsetLeft
+  const pW = parentTpc.offsetWidth
+  const pH = parentTpc.offsetHeight
   for (let i = 0; i < children.length; i++) {
-    const child = children[i]
-    const childP = child.firstChild
-    const cT = childP.offsetTop
-    const cL = childP.offsetLeft
-    const cW = childP.offsetWidth
-    const cH = childP.offsetHeight
+    const child = children[i] as Wrapper
+    const childP = child.firstChild as Parent
+    const childTpc = childP.querySelector('me-tpc') as Topic
+    const cT = childP.offsetTop + childTpc.offsetTop
+    const cL = childP.offsetLeft + childTpc.offsetLeft
+    const cW = childTpc.offsetWidth
+    const cH = childTpc.offsetHeight
 
     const bc = childP.firstChild.nodeObj.branchColor || branchColor
     const path = mei.generateSubBranch({ pT, pL, pW, pH, cT, cL, cW, cH, direction, isFirst })
     svgContainer.appendChild(createPath(path, bc, '2'))
 
-    const expander = childP.children[1]
+    const expander = childP.children[1] as Expander
 
     if (expander) {
       // this property is added in the layout phase
