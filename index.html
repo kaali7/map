@@ -981,7 +981,66 @@
     .dark-mode .ntb-subtab:hover { color: #f8f9fa; }
     .dark-mode .ntb-subtab.active { color: #a5b4fc; border-bottom-color: #a5b4fc; }
     .dark-mode .ntb-search-input { background: #212529; border-color: #495057; color: #f8f9fa; }
-    .dark-mode .ntb-search-input:focus { background: #121212; }
+    /* ═══════════════════════════════════════
+       CONTEXT MENU STYLES & ACCESSIBILITY FIX
+    ═══════════════════════════════════════ */
+    .map-container .context-menu {
+      z-index: 10000 !important;
+    }
+    .map-container .context-menu .menu-list {
+      background: #ffffff !important;
+      color: #1e293b !important;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+      border-radius: 12px !important;
+      padding: 4px !important;
+      overflow: hidden;
+    }
+    .map-container .context-menu .menu-list li {
+      background: transparent !important;
+      color: #334155 !important;
+      border-bottom: none !important;
+      border-radius: 6px !important;
+      padding: 7px 12px !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      transition: background 0.15s, color 0.15s !important;
+    }
+    .map-container .context-menu .menu-list li:hover {
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
+      filter: none !important;
+    }
+    .map-container .context-menu .menu-list li .key {
+      background: #f1f5f9 !important;
+      color: #64748b !important;
+      border: 1px solid #e2e8f0 !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
+    }
+
+    /* Dark Mode Context Menu */
+    .dark-mode .map-container .context-menu .menu-list {
+      background: #212529 !important;
+      color: #f8fafc !important;
+      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    }
+    .dark-mode .map-container .context-menu .menu-list li {
+      color: #cbd5e1 !important;
+    }
+    .dark-mode .map-container .context-menu .menu-list li:hover {
+      background: #343a40 !important;
+      color: #ffffff !important;
+    }
+    .dark-mode .map-container .context-menu .menu-list li .key {
+      background: #343a40 !important;
+      color: #94a3b8 !important;
+      border-color: #495057 !important;
+    }
 
     /* ═══════════════════════════════════════
        FILE INPUT (hidden)
