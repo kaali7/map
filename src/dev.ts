@@ -38,6 +38,8 @@ const E = MindElixir.E
 const options: Options = {
   el: '#map',
   newTopicName: 'New Node',
+  scaleMax: 5.0,
+  scaleMin: 0.1,
   // mouseSelectionButton: 2,
   editable: true,
   markdown: (text: string, obj: (NodeObj & { useMd?: boolean }) | (Arrow & { useMd?: boolean }) | (Summary & { useMd?: boolean })) => {

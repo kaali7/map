@@ -9,12 +9,12 @@ This document outlines the source code directory structure for the MindElixir pr
 - **`dev.ts` & `dev.dist.ts`**: Scripts used for local development and testing environments.
 - **`arrow.ts`**: Contains logic and rendering calculations for drawing relationship arrows/connections between nodes.
 - **`branchTests.ts`**: Tests and logic for generating different branch layouts and styles (straight, curved, angular).
-- **`const.ts`**: Centralized constants used throughout the application (e.g. key codes, class names, theme definitions).
+- **`const.ts`**: Centralized constants and theme definitions (Light & Dark) configured with transparent node backgrounds (`--main-bgcolor: 'transparent'`), borderless card defaults (`--root-border-color: 'rgba(0,0,0,0)'`, `--main-border: 'none'`), and canvas-matching root background (`--root-bgcolor: '#f8fafc'` in Light, `'#121212'` in Dark).
 - **`docs.ts`**: Used for documentation generation or examples.
 - **`i18n.ts`**: Internationalization module handling multiple languages for UI elements.
-- **`interact.ts`**: Handles user interactions like node dragging, double-clicking, and basic UI events.
+- **`interact.ts`**: Handles user interactions like node dragging, double-clicking, and canvas view centering (`toCenter` offset calculations relative to `me-nodes`).
 - **`linkDiv.ts`**: Manages the SVG lines and DOM layers that connect topics.
-- **`methods.ts`**: Contains core prototype methods attached to the MindElixir instance (like zoom, center, getting data).
+- **`methods.ts`**: Contains core prototype methods attached to the MindElixir instance (like zoom up to 500% scaleMax, center view, getting data).
 - **`mouse.ts`**: Specifically handles mouse events like panning the canvas, zooming via scroll, and selection.
 - **`nodeOperation.ts`**: Contains all CRUD operations for nodes (add, remove, move, edit text).
 - **`summary.ts`**: Logic for rendering and handling summary braces that group multiple nodes together.
@@ -53,7 +53,7 @@ TypeScript type definitions.
 Helper functions and internal utilities.
 - **`dom.ts` & `domManipulation.ts`**: DOM creation and manipulation helpers (`shapeTpc` sets `data-media-type` and `data-media-pos` on `me-tpc` for node image/icon position control).
 - **`layout.ts` & `layout-ssr.ts`**: The core layout engine that calculates node positions (Left, Right, Balanced).
-- **`generateBranch.ts`**: Helpers for drawing the SVG paths for branches.
+- **`generateBranch.ts`**: Helpers for drawing SVG paths for main and sub branches. `main()` draws root-to-main bezier curves while `sub()` computes smooth cubic Bezier S-curves (`M x1 y1 C xControl y1 xControl y2 x2 y2`) connecting parent center to child center.
 - **`panHelper.ts` & `LinkPanHelper.ts`**: Utilities for canvas panning physics.
 - **`plaintextConverter.ts` / `plaintextToMindElixir.ts` / `mindElixirToPlaintext.ts`**: Parsers that convert between plain text outlines and structured mind map JSON.
 - **`pubsub.ts`**: An event emitter used internally for decoupled communication.

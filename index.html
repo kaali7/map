@@ -1827,13 +1827,16 @@
             cssVar: {
               ...mind.theme.cssVar,
               '--main-color': '#f8f9fa',
-              '--main-bgcolor': '#212529',
+              '--main-bgcolor': 'transparent',
+              '--main-border': 'none',
               '--color': '#ced4da',
               '--bgcolor': '#121212',
               '--panel-color': '255, 255, 255',
               '--panel-bgcolor': '33, 37, 41',
               '--selected': '#343a40',
-              '--root-color': '#f8f9fa'
+              '--root-color': '#f8f9fa',
+              '--root-bgcolor': '#121212',
+              '--root-border-color': 'rgba(0, 0, 0, 0)'
             }
           });
           toast('🌙 Dark mode enabled');
@@ -1845,13 +1848,16 @@
             cssVar: {
               ...mind.theme.cssVar,
               '--main-color': '#111827',
-              '--main-bgcolor': '#ffffff',
+              '--main-bgcolor': 'transparent',
+              '--main-border': 'none',
               '--color': '#374151',
               '--bgcolor': '#f8fafc',
               '--panel-color': '17, 24, 39',
               '--panel-bgcolor': '255, 255, 255',
               '--selected': '#eff6ff',
-              '--root-color': '#111827'
+              '--root-color': '#111827',
+              '--root-bgcolor': '#f8fafc',
+              '--root-border-color': 'rgba(0, 0, 0, 0)'
             }
           });
           toast('☀️ Light mode enabled');

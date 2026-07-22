@@ -1,10 +1,10 @@
 import type { MindElixirData } from '../index'
 
-const node = (bg: string, color = '#ffffff', size = '14') => ({
-  background: bg, color, fontSize: size, fontWeight: '600',
+const node = (branchColor?: string, size = '14') => ({
+  branchColor, fontSize: size, fontWeight: '600',
 })
 
-const leaf = () => ({ background: '#f3f4f6', color: '#374151', fontSize: '12' })
+const leaf = () => ({ fontSize: '12' })
 
 const campaignBrainstorming: MindElixirData = {
   direction: 2, // SIDE — balanced layout
@@ -20,21 +20,23 @@ const campaignBrainstorming: MindElixirData = {
     ],
     cssVar: {
       '--main-color':   '#111827',
-      '--main-bgcolor': '#ffffff',
+      '--main-bgcolor': 'transparent',
       '--color':        '#374151',
       '--bgcolor':      '#f8fafc',
       '--panel-color':  '17, 24, 39',
       '--panel-bgcolor':'255, 255, 255',
       '--selected':     '#eff6ff',
       '--root-color':   '#111827',
-      '--root-bgcolor': 'transparent',
+      '--root-bgcolor': '#f8fafc',
+      '--root-border-color': 'rgba(0, 0, 0, 0)',
+      '--main-border':  'none',
       '--main-radius':  '22px',
     },
   },
   nodeData: {
     id: 'me-root',
     topic: 'Campaign\nBrainstorming',
-    style: { fontSize: '26', fontWeight: '700', color: '#111827', background: 'transparent' },
+    style: { fontSize: '26', fontWeight: '700' },
     children: [
 
       // ── LEFT ──

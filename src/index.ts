@@ -68,8 +68,8 @@ function MindElixir(
   this.editable = editable ?? true
   this.allowUndo = allowUndo ?? true
   this.scaleSensitivity = scaleSensitivity ?? 0.1
-  this.scaleMax = scaleMax ?? 1.4
-  this.scaleMin = scaleMin ?? 0.2
+  this.scaleMax = scaleMax ?? 5.0
+  this.scaleMin = scaleMin ?? 0.1
   this.generateMainBranch = generateMainBranch || main
   this.generateSubBranch = generateSubBranch || sub
   this.overflowHidden = overflowHidden ?? false
