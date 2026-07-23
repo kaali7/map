@@ -2448,7 +2448,113 @@
       })
       document.getElementById('mo-center')?.addEventListener('click', () => {
         mind.toCenter()
+        toast('View centered', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>')
         document.getElementById('more-options-popover').classList.remove('visible')
+      })
+      document.getElementById('rt-center')?.addEventListener('click', () => {
+        mind.toCenter()
+        toast('View centered', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>')
+      })
+      document.getElementById('rt-clear')?.addEventListener('click', () => {
+        document.getElementById('more-options-popover').classList.remove('visible')
+        if (!confirm('Are you sure you want to clear the canvas?')) return
+
+        const currentTitle = document.getElementById('map-title-display')?.title || 'Mind Map'
+        const blankData = {
+          theme: mind.theme || { name: 'Campaign' },
+          nodeData: {
+            topic: currentTitle,
+            id: `root-${Date.now().toString(36)}`,
+            children: [],
+          },
+          direction: 1,
+        }
+
+        mind.refresh(blankData)
+        mind.toCenter()
+        if (window.triggerAutoSave) window.triggerAutoSave()
+        toast('Canvas cleared', '#ef4444', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>')
+      })
+      document.getElementById('rt-new')?.addEventListener('click', async () => {
+        document.getElementById('more-options-popover').classList.remove('visible')
+        const name = prompt('Enter a name for your new mind map:', 'New Mind Map')
+        if (!name || !name.trim()) return
+
+        const title = name.trim()
+        const DEFAULT_DARK_THEME = {
+          name: 'Campaign',
+          palette: ['#2563eb', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'],
+          cssVar: {
+            '--main-color': '#f8f9fa',
+            '--main-bgcolor': 'transparent',
+            '--color': '#ced4da',
+            '--bgcolor': '#121212',
+            '--panel-color': '255, 255, 255',
+            '--panel-bgcolor': '33, 37, 41',
+            '--selected': '#343a40',
+            '--root-color': '#f8f9fa',
+            '--root-bgcolor': '#121212',
+            '--root-border-color': 'rgba(0, 0, 0, 0)',
+            '--main-border': 'none',
+            '--main-radius': '22px',
+          },
+        }
+
+        const blankData = {
+          theme: DEFAULT_DARK_THEME,
+          nodeData: {
+            topic: title,
+            id: `root-${Date.now().toString(36)}`,
+            children: [
+              {
+                topic: 'Main Topic 1',
+                id: `node-1-${Date.now().toString(36)}`,
+                children: [
+                  { topic: 'Subtopic 1', id: `sub-1-${Date.now().toString(36)}` },
+                  { topic: 'Subtopic 2', id: `sub-2-${Date.now().toString(36)}` },
+                ],
+              },
+              { topic: 'Main Topic 2', id: `node-2-${Date.now().toString(36)}` },
+            ],
+          },
+          direction: 1,
+        }
+
+        try {
+          const res = await fetch('/api/mindmaps', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, data: blankData }),
+          })
+
+          if (res.ok) {
+            const createdRecord = await res.json()
+            window.location.href = `index.html?id=${createdRecord.id}`
+            return
+          }
+        } catch (e) {}
+
+        // LocalStorage Fallback
+        try {
+          const LS_KEY = 'mindmaps_db_store'
+          const raw = localStorage.getItem(LS_KEY)
+          const store = raw ? JSON.parse(raw) : []
+          const newId = `map-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`
+          const newRecord = {
+            id: newId,
+            title,
+            theme: 'Campaign',
+            node_count: 4,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            data: blankData,
+          }
+          store.unshift(newRecord)
+          localStorage.setItem(LS_KEY, JSON.stringify(store))
+          window.location.href = `index.html?id=${newId}`
+        } catch (err) {
+          toast('Failed to create new map', '#dc2626')
+        }
       })
 
       /* ── Mobile Quick Action Bar Handlers ── */
