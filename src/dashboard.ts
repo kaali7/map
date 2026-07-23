@@ -7,6 +7,7 @@ interface MindMapRecord {
   node_count: number
   created_at: string
   updated_at: string
+  data?: any
 }
 
 let allMindMaps: MindMapRecord[] = []
@@ -77,17 +78,92 @@ function showToast(message: string, type: 'info' | 'success' | 'danger' = 'succe
   }, 3500)
 }
 
-// Load Mind Maps from API
+// LocalStorage Fallback Helpers for static hostings like Vercel
+const LS_KEY = 'mindmaps_db_store'
+
+function getLocalStore(): MindMapRecord[] {
+  try {
+    const raw = localStorage.getItem(LS_KEY)
+    if (!raw) {
+      const initialStore: MindMapRecord[] = [
+        {
+          id: 'map-default-demo',
+          title: 'Campaign Brainstorming',
+          theme: 'Campaign',
+          node_count: 14,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          data: {
+            theme: {
+              name: 'Campaign',
+              palette: ['#2563eb', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'],
+              cssVar: {
+                '--main-color': '#f8f9fa',
+                '--main-bgcolor': 'transparent',
+                '--color': '#ced4da',
+                '--bgcolor': '#121212',
+                '--panel-color': '255, 255, 255',
+                '--panel-bgcolor': '33, 37, 41',
+                '--selected': '#343a40',
+                '--root-color': '#f8f9fa',
+                '--root-bgcolor': '#121212',
+                '--root-border-color': 'rgba(0, 0, 0, 0)',
+                '--main-border': 'none',
+                '--main-radius': '22px',
+              },
+            },
+            nodeData: {
+              topic: 'Campaign Brainstorming',
+              id: 'root-campaign',
+              children: [
+                {
+                  topic: 'Marketing Channels',
+                  id: 'node-marketing',
+                  children: [
+                    { topic: 'Social Ads', id: 'sub-social' },
+                    { topic: 'Influencer Outreach', id: 'sub-influencers' },
+                  ],
+                },
+                {
+                  topic: 'Product Features',
+                  id: 'node-features',
+                  children: [
+                    { topic: 'Core API Integration', id: 'sub-api' },
+                    { topic: 'Mobile Responsiveness', id: 'sub-mobile' },
+                  ],
+                },
+              ],
+            },
+            direction: 1,
+          },
+        },
+      ]
+      localStorage.setItem(LS_KEY, JSON.stringify(initialStore))
+      return initialStore
+    }
+    return JSON.parse(raw)
+  } catch (e) {
+    return []
+  }
+}
+
+function saveLocalStore(store: MindMapRecord[]) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(store))
+  } catch (e) {}
+}
+
+// Load Mind Maps from API (with LocalStorage fallback)
 async function loadMindMaps() {
   try {
     const res = await fetch('/api/mindmaps')
-    if (!res.ok) throw new Error('Failed to load mind maps')
+    if (!res.ok) throw new Error('API unavailable')
     allMindMaps = await res.json()
-    renderDashboard()
   } catch (err: any) {
-    console.error(err)
-    showToast('Failed to load mind maps from database', 'danger')
+    // Fallback to local storage when deployed on static environments (Vercel)
+    allMindMaps = getLocalStore()
   }
+  renderDashboard()
 }
 
 // Close all open card dropdowns
@@ -254,24 +330,52 @@ function closeModal(modalId: string) {
 // Duplicate Mind Map
 async function duplicateMap(id: string) {
   try {
-    const res = await fetch(`/api/mindmaps/${id}`)
-    if (!res.ok) throw new Error('Failed to fetch map')
-    const original = await res.json()
+    let original: any = null
+    try {
+      const res = await fetch(`/api/mindmaps/${id}`)
+      if (res.ok) original = await res.json()
+    } catch (e) {}
+
+    if (!original) {
+      const store = getLocalStore()
+      original = store.find(m => m.id === id)
+    }
+
+    if (!original) throw new Error('Map not found')
 
     const duplicatedData = typeof original.data === 'string' ? JSON.parse(original.data) : original.data
     const newTitle = `${original.title} (Copy)`
 
-    const createRes = await fetch('/api/mindmaps', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: newTitle,
-        data: duplicatedData,
-      }),
-    })
+    try {
+      const createRes = await fetch('/api/mindmaps', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: newTitle,
+          data: duplicatedData,
+        }),
+      })
 
-    if (!createRes.ok) throw new Error('Failed to duplicate')
+      if (createRes.ok) {
+        showToast('Mind map duplicated successfully!')
+        await loadMindMaps()
+        return
+      }
+    } catch (e) {}
 
+    // Fallback to local storage
+    const store = getLocalStore()
+    const newRecord: MindMapRecord = {
+      id: `map-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
+      title: newTitle,
+      theme: typeof original.theme === 'string' ? original.theme : JSON.stringify(original.theme || ''),
+      node_count: original.node_count || 1,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      data: duplicatedData,
+    }
+    store.unshift(newRecord)
+    saveLocalStore(store)
     showToast('Mind map duplicated successfully!')
     await loadMindMaps()
   } catch (err: any) {
@@ -288,12 +392,18 @@ async function deleteMap(id: string) {
 
   try {
     const res = await fetch(`/api/mindmaps/${id}`, { method: 'DELETE' })
-    if (!res.ok) throw new Error('Failed to delete')
-    showToast('Mind map deleted', 'info')
-    await loadMindMaps()
-  } catch (err: any) {
-    showToast(err.message || 'Deletion failed', 'danger')
-  }
+    if (res.ok) {
+      showToast('Mind map deleted', 'info')
+      await loadMindMaps()
+      return
+    }
+  } catch (err: any) {}
+
+  // Fallback to local storage
+  const store = getLocalStore().filter(m => m.id !== id)
+  saveLocalStore(store)
+  showToast('Mind map deleted', 'info')
+  await loadMindMaps()
 }
 
 // Open Edit Modal
@@ -394,16 +504,32 @@ function setupEventListeners() {
         }),
       })
 
-      if (!res.ok) throw new Error('Failed to create mind map')
+      if (res.ok) {
+        const createdMap = await res.json()
+        closeModal('modal-new-map')
+        showToast('Mind map created!')
+        window.location.href = `index.html?id=${createdMap.id}`
+        return
+      }
+    } catch (err: any) {}
 
-      const createdMap = await res.json()
-      closeModal('modal-new-map')
-      showToast('Mind map created!')
-
-      window.location.href = `index.html?id=${createdMap.id}`
-    } catch (err: any) {
-      showToast(err.message || 'Creation failed', 'danger')
+    // LocalStorage Fallback
+    const store = getLocalStore()
+    const newId = `map-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`
+    const newRecord: MindMapRecord = {
+      id: newId,
+      title,
+      theme: typeof blankData.theme === 'string' ? blankData.theme : JSON.stringify(blankData.theme),
+      node_count: 4,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      data: blankData,
     }
+    store.unshift(newRecord)
+    saveLocalStore(store)
+    closeModal('modal-new-map')
+    showToast('Mind map created!')
+    window.location.href = `index.html?id=${newId}`
   })
 
   // Submit Edit Name
@@ -423,14 +549,25 @@ function setupEventListeners() {
         body: JSON.stringify({ title }),
       })
 
-      if (!res.ok) throw new Error('Failed to update name')
+      if (res.ok) {
+        closeModal('modal-edit-map')
+        showToast('Name updated!')
+        await loadMindMaps()
+        return
+      }
+    } catch (err: any) {}
 
-      closeModal('modal-edit-map')
-      showToast('Name updated!')
-      await loadMindMaps()
-    } catch (err: any) {
-      showToast(err.message || 'Update failed', 'danger')
+    // LocalStorage Fallback
+    const store = getLocalStore()
+    const target = store.find(m => m.id === id)
+    if (target) {
+      target.title = title
+      target.updated_at = new Date().toISOString()
+      saveLocalStore(store)
     }
+    closeModal('modal-edit-map')
+    showToast('Name updated!')
+    await loadMindMaps()
   })
 }
 
@@ -439,3 +576,4 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners()
   loadMindMaps()
 })
+

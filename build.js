@@ -49,6 +49,7 @@ for (let i = 0; i < buildList.length; i++) {
         formats: info.formats,
       },
       rollupOptions: {
+        input: info.enrty,
         plugins: [
           strip({
             include: ['**/*.ts', '**/*.js'],

@@ -190,14 +190,31 @@ function updateDbStatusBadge(status: 'saved' | 'saving' | 'error') {
   }
 }
 
+const LS_KEY_DEV = 'mindmaps_db_store'
+
+function getLocalStoreDev(): any[] {
+  try {
+    const raw = localStorage.getItem(LS_KEY_DEV)
+    return raw ? JSON.parse(raw) : []
+  } catch (e) {
+    return []
+  }
+}
+
+function saveLocalStoreDev(store: any[]) {
+  try {
+    localStorage.setItem(LS_KEY_DEV, JSON.stringify(store))
+  } catch (e) {}
+}
+
 async function saveCurrentMapToDb() {
   if (!currentMapId) return
   updateDbStatusBadge('saving')
-  try {
-    const data = mind.getData()
-    const titleDisplay = document.getElementById('map-title-display')
-    const currentTitle = titleDisplay ? titleDisplay.textContent || 'Mind Map' : 'Mind Map'
+  const data = mind.getData()
+  const titleDisplay = document.getElementById('map-title-display')
+  const currentTitle = titleDisplay ? titleDisplay.title || titleDisplay.textContent || 'Mind Map' : 'Mind Map'
 
+  try {
     const res = await fetch(`/api/mindmaps/${currentMapId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -207,10 +224,35 @@ async function saveCurrentMapToDb() {
       }),
     })
 
-    if (!res.ok) throw new Error('Save failed')
+    if (res.ok) {
+      updateDbStatusBadge('saved')
+      return
+    }
+  } catch (err) {}
+
+  // LocalStorage Fallback for Vercel static deployment
+  try {
+    const store = getLocalStoreDev()
+    const targetIdx = store.findIndex((m: any) => m.id === currentMapId)
+    const now = new Date().toISOString()
+    if (targetIdx !== -1) {
+      store[targetIdx].title = currentTitle
+      store[targetIdx].data = data
+      store[targetIdx].updated_at = now
+    } else {
+      store.unshift({
+        id: currentMapId,
+        title: currentTitle,
+        theme: typeof data.theme === 'string' ? data.theme : JSON.stringify(data.theme || ''),
+        node_count: 1,
+        created_at: now,
+        updated_at: now,
+        data: data,
+      })
+    }
+    saveLocalStoreDev(store)
     updateDbStatusBadge('saved')
-  } catch (err) {
-    console.error('Failed to save to SQLite:', err)
+  } catch (e) {
     updateDbStatusBadge('error')
   }
 }
@@ -233,41 +275,51 @@ async function initFromDb() {
     return
   }
 
+  updateDbStatusBadge('saving')
+
+  let record: any = null
   try {
-    updateDbStatusBadge('saving')
     const res = await fetch(`/api/mindmaps/${currentMapId}`)
-    if (!res.ok) throw new Error('Map not found')
-
-    const record = await res.json()
-    const data = typeof record.data === 'string' ? JSON.parse(record.data) : record.data
-
-    if (!data.theme) {
-      data.theme = DEFAULT_DARK_THEME
+    if (res.ok) {
+      record = await res.json()
     }
+  } catch (err) {}
 
-    mind.init(data)
-    if (data.theme) {
-      mind.changeTheme(data.theme, false)
-    }
+  if (!record) {
+    const store = getLocalStoreDev()
+    record = store.find((m: any) => m.id === currentMapId)
+  }
 
-    const titleDisplay = document.getElementById('map-title-display')
-    const titleInput = document.getElementById('title-edit-input') as HTMLInputElement | null
-    if (titleDisplay && record.title) {
-      const formattedTitle = record.title.length > 4 ? record.title.slice(0, 4) + '...' : record.title
-      titleDisplay.textContent = formattedTitle
-      titleDisplay.title = record.title
-      if (titleInput) {
-        titleInput.value = record.title
-      }
-      document.title = `Mind Elixir — ${record.title}`
-    }
-
-    updateDbStatusBadge('saved')
-  } catch (err) {
-    console.error('Failed to load mind map from SQLite:', err)
+  if (!record) {
     updateDbStatusBadge('error')
     mind.init(productLaunch)
+    return
   }
+
+  const data = typeof record.data === 'string' ? JSON.parse(record.data) : record.data
+
+  if (!data.theme) {
+    data.theme = DEFAULT_DARK_THEME
+  }
+
+  mind.init(data)
+  if (data.theme) {
+    mind.changeTheme(data.theme, false)
+  }
+
+  const titleDisplay = document.getElementById('map-title-display')
+  const titleInput = document.getElementById('title-edit-input') as HTMLInputElement | null
+  if (titleDisplay && record.title) {
+    const formattedTitle = record.title.length > 4 ? record.title.slice(0, 4) + '...' : record.title
+    titleDisplay.textContent = formattedTitle
+    titleDisplay.title = record.title
+    if (titleInput) {
+      titleInput.value = record.title
+    }
+    document.title = `Mind Elixir — ${record.title}`
+  }
+
+  updateDbStatusBadge('saved')
 }
 
 initFromDb()

@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineConfig, Plugin } from 'vite'
 import istanbul from 'vite-plugin-istanbul'
 import {
@@ -138,6 +139,15 @@ export default defineConfig({
     port: 23333,
     strictPort: true,
   },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
+      },
+    },
+  },
   plugins: [
     mindmapApiPlugin(),
     istanbul({
@@ -148,3 +158,4 @@ export default defineConfig({
     }),
   ],
 })
+

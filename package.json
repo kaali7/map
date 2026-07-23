@@ -12,7 +12,9 @@
   "scripts": {
     "lint": "eslint --cache --max-warnings 0  \"src/**/*.{js,json,ts}\" --fix",
     "dev": "vite",
-    "build": "node build.js && tsc",
+    "build:app": "vite build",
+    "vercel-build": "vite build",
+    "build": "vite build && node build.js && tsc",
     "tsc": "tsc",
     "preview": "vite preview",
     "test": "playwright test",
