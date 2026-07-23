@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindElixir Dashboard</title>
+    <meta name="description" content="Dashboard for MindElixir core mind map visualization." />
+    <link rel="icon" type="image/svg+xml" href="/src/icons/add-circle.svg" />
+  </head>
+  <body>
+    <!-- Top Header -->
+    <header class="dashboard-header">
+      <div class="header-container">
+        <a href="dashboard.html" class="brand">
+          <div class="brand-icon">M</div>
+          <span class="brand-title">MindElixir</span>
+        </a>
+        <div class="header-actions">
+          <button id="btn-open-new-modal" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            New Blank Map
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="dashboard-body">
+      <!-- Title & Search Row -->
+      <section class="title-search-row">
+        <h1 class="workspace-title">
+          Local Mind Maps Workspace <span id="stat-count" class="count-badge">(0)</span>
+        </h1>
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search mind maps by name..." />
+        </div>
+      </section>
+
+      <!-- Mind Maps Cards Grid -->
+      <section id="cards-grid" class="cards-grid">
+        <!-- Rendered dynamically via JavaScript -->
+      </section>
+    </main>
+
+    <!-- Modal 1: Create Blank Mind Map -->
+    <div id="modal-new-map" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Create New Mind Map
+          </h2>
+          <button class="modal-close" data-close="modal-new-map" title="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="new-title">Mind Map Name</label>
+            <input type="text" id="new-title" class="form-input" placeholder="e.g. ashwini" required autocomplete="off" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close="modal-new-map">Cancel</button>
+          <button id="btn-create-submit" class="btn btn-primary">
+            Create & Open Map
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2: Edit Name -->
+    <div id="modal-edit-map" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            Edit Mind Map Name
+          </h2>
+          <button class="modal-close" data-close="modal-edit-map" title="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="edit-id" />
+          <div class="form-group">
+            <label class="form-label" for="edit-title">Mind Map Name</label>
+            <input type="text" id="edit-title" class="form-input" required autocomplete="off" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close="modal-edit-map">Cancel</button>
+          <button id="btn-edit-submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="/src/dashboard.ts"></script>
+  </body>
+</html>

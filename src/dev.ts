@@ -30,14 +30,37 @@ interface Window {
   destroy: () => void
   testMarkdown: () => void
   addMarkdownNode: () => void
+  triggerAutoSave?: () => void
+  saveCurrentMapToDb?: () => void
 }
 
 declare let window: Window
 
 const E = MindElixir.E
+
+export const DEFAULT_DARK_THEME = {
+  name: 'Campaign',
+  palette: ['#2563eb', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'],
+  cssVar: {
+    '--main-color': '#f8f9fa',
+    '--main-bgcolor': 'transparent',
+    '--color': '#ced4da',
+    '--bgcolor': '#121212',
+    '--panel-color': '255, 255, 255',
+    '--panel-bgcolor': '33, 37, 41',
+    '--selected': '#343a40',
+    '--root-color': '#f8f9fa',
+    '--root-bgcolor': '#121212',
+    '--root-border-color': 'rgba(0, 0, 0, 0)',
+    '--main-border': 'none',
+    '--main-radius': '22px',
+  },
+}
+
 const options: Options = {
   el: '#map',
   direction: 1,
+  theme: DEFAULT_DARK_THEME,
   newTopicName: 'New Node',
   scaleMax: 5.0,
   scaleMin: 0.1,
@@ -140,8 +163,114 @@ const options: Options = {
 
 let mind = new MindElixir(options)
 
-// Initialize with the Product Launch mind map
-mind.init(productLaunch)
+let currentMapId: string | null = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('id') : null
+let saveDebounceTimer: any = null
+
+function updateDbStatusBadge(status: 'saved' | 'saving' | 'error') {
+  const badge = document.getElementById('db-status-badge')
+  if (!badge) return
+  if (status === 'saved') {
+    badge.style.background = 'rgba(139, 92, 246, 0.18)'
+    badge.style.borderColor = 'rgba(139, 92, 246, 0.4)'
+    badge.style.boxShadow = '0 0 12px rgba(139, 92, 246, 0.4)'
+    badge.title = 'Saved to mindmap.db'
+    badge.innerHTML = '<span style="color: #a78bfa; filter: drop-shadow(0 0 6px #a78bfa); font-size: 10px;">●</span>'
+  } else if (status === 'saving') {
+    badge.style.background = 'rgba(245, 158, 11, 0.18)'
+    badge.style.borderColor = 'rgba(245, 158, 11, 0.4)'
+    badge.style.boxShadow = '0 0 12px rgba(245, 158, 11, 0.4)'
+    badge.title = 'Saving to mindmap.db...'
+    badge.innerHTML = '<span style="color: #fbbf24; filter: drop-shadow(0 0 6px #fbbf24); font-size: 10px;">●</span>'
+  } else {
+    badge.style.background = 'rgba(239, 68, 68, 0.18)'
+    badge.style.borderColor = 'rgba(239, 68, 68, 0.4)'
+    badge.style.boxShadow = '0 0 12px rgba(239, 68, 68, 0.4)'
+    badge.title = 'DB Sync Error'
+    badge.innerHTML = '<span style="color: #ef4444; filter: drop-shadow(0 0 6px #ef4444); font-size: 10px;">●</span>'
+  }
+}
+
+async function saveCurrentMapToDb() {
+  if (!currentMapId) return
+  updateDbStatusBadge('saving')
+  try {
+    const data = mind.getData()
+    const titleDisplay = document.getElementById('map-title-display')
+    const currentTitle = titleDisplay ? titleDisplay.textContent || 'Mind Map' : 'Mind Map'
+
+    const res = await fetch(`/api/mindmaps/${currentMapId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: currentTitle,
+        data: data,
+      }),
+    })
+
+    if (!res.ok) throw new Error('Save failed')
+    updateDbStatusBadge('saved')
+  } catch (err) {
+    console.error('Failed to save to SQLite:', err)
+    updateDbStatusBadge('error')
+  }
+}
+
+function triggerAutoSave() {
+  if (!currentMapId) return
+  updateDbStatusBadge('saving')
+  if (saveDebounceTimer) clearTimeout(saveDebounceTimer)
+  saveDebounceTimer = setTimeout(() => {
+    saveCurrentMapToDb()
+  }, 1000)
+}
+
+window.triggerAutoSave = triggerAutoSave
+window.saveCurrentMapToDb = saveCurrentMapToDb
+
+async function initFromDb() {
+  if (!currentMapId) {
+    mind.init(productLaunch)
+    return
+  }
+
+  try {
+    updateDbStatusBadge('saving')
+    const res = await fetch(`/api/mindmaps/${currentMapId}`)
+    if (!res.ok) throw new Error('Map not found')
+
+    const record = await res.json()
+    const data = typeof record.data === 'string' ? JSON.parse(record.data) : record.data
+
+    if (!data.theme) {
+      data.theme = DEFAULT_DARK_THEME
+    }
+
+    mind.init(data)
+    if (data.theme) {
+      mind.changeTheme(data.theme, false)
+    }
+
+    const titleDisplay = document.getElementById('map-title-display')
+    const titleInput = document.getElementById('title-edit-input') as HTMLInputElement | null
+    if (titleDisplay && record.title) {
+      const formattedTitle = record.title.length > 4 ? record.title.slice(0, 4) + '...' : record.title
+      titleDisplay.textContent = formattedTitle
+      titleDisplay.title = record.title
+      if (titleInput) {
+        titleInput.value = record.title
+      }
+      document.title = `Mind Elixir — ${record.title}`
+    }
+
+    updateDbStatusBadge('saved')
+  } catch (err) {
+    console.error('Failed to load mind map from SQLite:', err)
+    updateDbStatusBadge('error')
+    mind.init(productLaunch)
+  }
+}
+
+initFromDb()
 
 // Branch styles available for switching (not applied by default)
 const branchThemes = {
@@ -174,6 +303,7 @@ function sleep() {
 
 mind.bus.addListener('operation', (operation: Operation) => {
   console.log(operation)
+  triggerAutoSave()
   // return {
   //   name: action name,
   //   obj: target object

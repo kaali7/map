@@ -19,7 +19,7 @@
       width: 100%; height: 100%;
       overflow: hidden;
       font-family: 'Inter', sans-serif;
-      background: #f7f8fc;
+      background: #121212;
     }
 
     /* ═══════════════════════════════════════
@@ -28,7 +28,7 @@
     #header {
       position: fixed;
       top: 12px; left: 12px; right: 12px;
-      height: 52px;
+      height: 40px;
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -39,28 +39,30 @@
     .header-left {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border-radius: 14px;
-      padding: 5px 10px 5px 8px;
+      border-radius: 12px;
+      padding: 4px 8px;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.7);
       height: 100%;
+      box-sizing: border-box;
     }
 
     .logo-icon {
-      width: 34px; height: 34px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, #f43f6c 0%, #a855f7 100%);
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
       display: flex; align-items: center; justify-content: center;
       color: white;
-      font-size: 17px;
+      font-size: 12.5px;
       font-weight: 800;
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
       flex-shrink: 0;
       user-select: none;
+      box-shadow: 0 2px 6px rgba(236, 72, 153, 0.3);
     }
 
     .title-area {
@@ -68,14 +70,14 @@
       align-items: center;
       gap: 4px;
       cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 8px;
+      padding: 3px 6px;
+      border-radius: 7px;
       transition: background 0.15s;
     }
     .title-area:hover { background: #f3f4f6; }
 
     #map-title-display {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: #111827;
       white-space: nowrap;
@@ -86,13 +88,13 @@
 
     .chevron-icon {
       color: #9ca3af;
-      width: 14px; height: 14px;
+      width: 13px; height: 13px;
       flex-shrink: 0;
     }
 
     .header-icon-btn {
-      width: 32px; height: 32px;
-      border-radius: 8px;
+      width: 28px; height: 28px;
+      border-radius: 7px;
       border: none;
       background: transparent;
       color: #6b7280;
@@ -102,7 +104,7 @@
       flex-shrink: 0;
     }
     .header-icon-btn:hover { background: #f3f4f6; color: #374151; }
-    .header-icon-btn svg { width: 16px; height: 16px; }
+    .header-icon-btn svg { width: 15px; height: 15px; }
 
     /* Spacer */
     .header-spacer { flex: 1; }
@@ -115,11 +117,12 @@
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border-radius: 14px;
-      padding: 5px 8px;
+      border-radius: 12px;
+      padding: 4px 8px;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.7);
       height: 100%;
+      box-sizing: border-box;
     }
 
     .btn-share {
@@ -163,7 +166,7 @@
       top: 0; left: 0; right: 0; bottom: 0;
       width: 100vw;
       height: 100vh;
-      background: #ffffff;
+      background: #121212;
     }
 
     /* ═══════════════════════════════════════
@@ -671,14 +674,14 @@
     #node-toolbar {
       position: fixed;
       z-index: 5000;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(20px) saturate(190%);
-      -webkit-backdrop-filter: blur(20px) saturate(190%);
-      border-radius: 16px;
-      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border-radius: 18px;
+      box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.8);
-      padding: 8px;
-      width: 235px;
+      padding: 10px 12px;
+      width: 290px;
       pointer-events: all;
       transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
       transform-origin: bottom center;
@@ -705,17 +708,18 @@
     .ntb-tabs {
       display: flex;
       align-items: center;
-      gap: 3px;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
+      justify-content: space-between;
+      gap: 5px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     }
     .dark-mode .ntb-tabs {
       border-bottom-color: rgba(255, 255, 255, 0.08);
     }
     .ntb-tab {
-      width: 32px; height: 32px;
-      border-radius: 8px;
+      width: 36px; height: 34px;
+      border-radius: 9px;
       border: none;
       background: transparent;
       cursor: pointer;
@@ -727,7 +731,7 @@
     }
     .ntb-tab:hover  { background: #f1f5f9; color: #111827; transform: translateY(-1px); }
     .ntb-tab.active { background: #ede9fe; color: #7c3aed; }
-    .ntb-tab svg { width: 16px; height: 16px; }
+    .ntb-tab svg { width: 17px; height: 17px; }
 
     .ntb-divider { flex: 1; }
 
@@ -960,8 +964,33 @@
     .ntb-emoji-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 3px;
+      gap: 4px;
       margin-bottom: 8px;
+    }
+    .ntb-emoji-item {
+      height: 30px;
+      font-size: 17px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, transform 0.15s ease;
+      outline: none;
+    }
+    .ntb-emoji-item:hover {
+      background: rgba(0, 0, 0, 0.06);
+      transform: scale(1.18);
+    }
+    .dark-mode .ntb-emoji-item {
+      background: transparent;
+      color: #f8fafc;
+    }
+    .dark-mode .ntb-emoji-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.18);
     }
 
     /* ═══════════════════════════════════════
@@ -1065,8 +1094,8 @@
 
     /* SVG Icon Grid Item */
     .ntb-svg-icon-item {
-      width: 32px; height: 32px;
-      border-radius: 8px;
+      width: 36px; height: 36px;
+      border-radius: 9px;
       border: 1px solid transparent;
       background: transparent;
       cursor: pointer;
@@ -1085,7 +1114,7 @@
       color: #7c3aed;
     }
     .ntb-svg-icon-item svg {
-      width: 18px; height: 18px;
+      width: 20px; height: 20px;
       pointer-events: none;
     }
 
@@ -1198,7 +1227,8 @@
     .dark-mode .ntb-subtab:hover { color: #f8fafc; background: rgba(255, 255, 255, 0.08); }
     .dark-mode .ntb-subtab.active { color: #c084fc; background: #2b3036; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
     .dark-mode .ntb-search-input { background: #121212; border-color: #343a40; color: #f8fafc; }
-    .dark-mode .ntb-emoji-item:hover { background: #2b3036; }
+    .dark-mode .ntb-emoji-item { background: transparent; }
+    .dark-mode .ntb-emoji-item:hover { background: rgba(255, 255, 255, 0.12); transform: scale(1.18); }
     .dark-mode #ntb-img-type-select { background: #121212; border-color: #343a40; color: #f8fafc; }
     /* ═══════════════════════════════════════
        CONTEXT MENU STYLES & ACCESSIBILITY FIX
@@ -1377,17 +1407,27 @@
       }
       .header-left {
         padding: 4px 8px;
-        gap: 6px;
-        flex-shrink: 0;
+        gap: 4px;
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: hidden;
       }
 
-      /* Truncate map title to show first 4-5 letters on mobile/tablet */
+      /* Truncate map title flexibly on mobile/tablet */
       #map-title-display {
-        max-width: 52px !important;
+        max-width: 90px !important;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: 12.5px;
+        font-size: 12px;
+      }
+
+      #db-status-badge {
+        font-size: 10px !important;
+        padding: 3px 7px !important;
+        margin-right: 2px !important;
+        border-radius: 8px !important;
+        gap: 4px !important;
       }
 
       /* Hide bulky desktop middle toolbar on phone/tablet screens */
@@ -1397,6 +1437,7 @@
 
       .header-right {
         display: flex !important;
+        align-items: center;
         padding: 3px 6px;
         gap: 3px;
         flex-shrink: 0;
@@ -1756,10 +1797,13 @@
 
     <!-- Left section: logo + title -->
     <div class="header-left">
+      <a href="dashboard.html" class="header-icon-btn" title="Back to Dashboard" style="margin-right: 4px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; color: #818cf8;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
       <div class="logo-icon">M</div>
 
       <div class="title-area" id="title-toggle">
-        <span id="map-title-display">Campaign Brainstorming</span>
+        <span id="map-title-display" title="Campaign Brainstorming">Camp...</span>
         <svg class="chevron-icon" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/>
         </svg>
@@ -1856,6 +1900,10 @@
 
     <!-- Right section: actions + avatar + menu -->
     <div class="header-right">
+      <span id="db-status-badge" title="Saved to mindmap.db" style="width: 22px; height: 22px; border-radius: 50%; background: rgba(139, 92, 246, 0.18); display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(139, 92, 246, 0.4); box-shadow: 0 0 12px rgba(139, 92, 246, 0.35); margin-right: 4px; flex-shrink: 0; cursor: help;">
+        <span style="color: #a78bfa; filter: drop-shadow(0 0 6px #a78bfa); font-size: 10px;">●</span>
+      </span>
+
       <button class="header-icon-btn mobile-undo-btn" id="m-rt-undo" title="Undo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
       </button>
@@ -2174,14 +2222,6 @@
 
           <!-- Scrollable Icons Container -->
           <div id="ntb-icon-container" class="ntb-emoji-scroll-container"></div>
-
-          <!-- Selected Icon Preview Card -->
-          <div id="ntb-icon-preview-card" class="ntb-icon-preview-card">
-            <div id="ntb-icon-preview-svg" class="ntb-icon-preview-svg">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            </div>
-            <span id="ntb-icon-preview-name" class="ntb-icon-preview-name">Briefcase</span>
-          </div>
         </div>
       </div>
 
@@ -2344,10 +2384,23 @@
     titleToggle.addEventListener('click', (e) => {
       e.stopPropagation()
       titlePopover.classList.toggle('visible')
-      if (titlePopover.classList.contains('visible')) titleInput.focus()
+      if (titlePopover.classList.contains('visible')) {
+        if (titleDisplay.title) {
+          titleInput.value = titleDisplay.title
+        }
+        titleInput.focus()
+        titleInput.select()
+      }
     })
+    function formatTitle(title) {
+      if (!title) return 'Unti...'
+      return title.length > 4 ? title.slice(0, 4) + '...' : title
+    }
     titleInput.addEventListener('input', () => {
-      titleDisplay.textContent = titleInput.value || 'Untitled Map'
+      const val = titleInput.value.trim() || 'Untitled Map'
+      titleDisplay.textContent = formatTitle(val)
+      titleDisplay.title = titleInput.value || 'Untitled Map'
+      if (window.triggerAutoSave) window.triggerAutoSave()
     })
     titleInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') titlePopover.classList.remove('visible')
@@ -2427,73 +2480,18 @@
           toast('Select a node to format')
         }
       })
-      document.getElementById('mqb-delete').addEventListener('click', () => {
-        if (mind.currentNodes && mind.currentNodes.length > 0) {
-          mind.removeNodes(mind.currentNodes)
-        } else if (mind.currentNode) {
-          mind.removeNodes([mind.currentNode])
-        } else {
-          toast('Select a node to delete')
-        }
-      })
-
-      /* ── Layout Popover ── */
-      const layoutToggle = document.getElementById('bl-layout-icon')
-      const layoutPopover = document.getElementById('layout-popover')
-      layoutToggle.addEventListener('click', (e) => {
-        e.stopPropagation()
-        layoutPopover.classList.toggle('visible')
-      })
-      document.addEventListener('click', (e) => {
-        if (!layoutPopover.contains(e.target) && !layoutToggle.contains(e.target)) {
-          layoutPopover.classList.remove('visible')
-        }
-      })
-      document.getElementById('layout-balanced').addEventListener('click', () => { mind.initSide(); toast('Layout: Balanced'); layoutPopover.classList.remove('visible') })
-      document.getElementById('layout-right').addEventListener('click', () => { mind.initRight(); toast('Layout: Right'); layoutPopover.classList.remove('visible') })
-      document.getElementById('layout-left').addEventListener('click', () => { mind.initLeft(); toast('Layout: Left'); layoutPopover.classList.remove('visible') })
-
-      /* ── Zoom controls ── */
-      document.getElementById('bl-zoom-in').addEventListener('click', () => {
-        mind.scale(mind.scaleVal + 0.1)
-        updateZoom()
-      })
-      document.getElementById('bl-zoom-out').addEventListener('click', () => {
-        mind.scale(mind.scaleVal - 0.1)
-        updateZoom()
-      })
-
-      /* ── Center ── */
-      document.getElementById('rt-center').addEventListener('click', () => {
-        mind.toCenter()
-      })
-
-      /* ── New map ── */
-      document.getElementById('rt-new').addEventListener('click', () => {
-        if (!confirm('Create a new blank mind map? Unsaved changes will be lost.')) return
-        const title = titleInput.value || 'New Mind Map'
-        mind.refresh(window.M.new(title))
-        mind.toCenter()
-        document.getElementById('more-options-popover').classList.remove('visible')
-        toast('New mind map created', '#111827', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>')
-      })
-
-      /* ── Clear Canvas ── */
-      document.getElementById('rt-clear').addEventListener('click', () => {
-        if (!confirm('Are you sure you want to clear the canvas? All nodes will be removed.')) return
-        const title = titleInput.value || 'Main Topic'
-        mind.refresh(window.M.new(title))
-        mind.toCenter()
-        document.getElementById('more-options-popover').classList.remove('visible')
-        toast('Canvas cleared', '#dc2626', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>')
-      })
-
-      /* ── Save ── */
-      document.getElementById('btn-save').addEventListener('click', () => {
+           /* ── Save ── */
+      document.getElementById('btn-save')?.addEventListener('click', () => {
+        if (window.saveCurrentMapToDb) window.saveCurrentMapToDb()
         const data = mind.getData()
         const title = titleInput.value || 'My Mind Map'
         localStorage.setItem('me-save', JSON.stringify({ title, data, at: new Date().toISOString() }))
-        toast('Saved to browser', '#16a34a', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>')
+        toast('Saved to mindmap.db', '#16a34a', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>')
+      })
+
+      document.getElementById('mo-save')?.addEventListener('click', () => {
+        if (window.saveCurrentMapToDb) window.saveCurrentMapToDb()
+        toast('Saved to mindmap.db', '#16a34a', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>')
       })
 
       /* ── Share ── */
@@ -2533,6 +2531,7 @@
             titleDisplay.textContent = titleInput.value
             mind.refresh(data)
             mind.toCenter()
+            if (window.triggerAutoSave) window.triggerAutoSave()
             toast('Map imported successfully', '#16a34a', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>')
           } catch {
             toast('Invalid JSON file', '#dc2626', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>')
@@ -2597,9 +2596,9 @@
             e.stopPropagation()
             currentThemeIdx = idx
             mind.changeTheme({ ...mind.theme, palette: t.palette })
+            if (window.triggerAutoSave) window.triggerAutoSave()
             renderFlyoutItems()
-            toast('Theme: ' + t.name, '#7c3aed', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>')
-            // Close both flyout and main popover when a theme is chosen
+            toast('Theme: ' + t.name + ' saved', '#7c3aed', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="10.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><circle cx="10.5" cy="17.5" r="2.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01A1.49 1.49 0 0 1 12.5 18c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>')
             themeFlyoutPanel.classList.remove('visible')
             document.getElementById('more-options-popover').classList.remove('visible')
           })
@@ -2621,6 +2620,8 @@
           themeFlyoutPanel.classList.remove('visible')
         }
       })
+
+
 
       /* ── Dark Mode ── */
       let isDarkMode = true;
